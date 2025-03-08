@@ -1,54 +1,49 @@
-# React + TypeScript + Vite
+# Verbski: A Russian Verb Conjugation Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🎮 Game Overview
 
-Currently, two official plugins are available:
+Verbski presents you with a conjugated Russian verb and challenges you to select the correct personal pronoun (я, ты, он/она/оно, etc.) that matches it. The game tracks your score, keeps a history of your attempts, and provides immediate feedback to enhance the learning process.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## 💻 Installation and Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/zaakirio/verbski.git
+   cd verbski
+   ```
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+4. Build for production:
+   ```bash
+   npm run build
+   ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+
+## 📚 How It Works
+
+The game displays a conjugated verb form (e.g. "делаю") and prompts you to choose which personal pronoun it corresponds to (in this case, "я"). Each correct answer increases your score and streak, while incorrect answers provide the correct solution.
+
+The verb data is stored in a JSON file, currenlty supporting approx. 50 common Russian verbs, each with their full present tense conjugation patterns.
+
+## 🛠️ Future Enhancements
+
+- Difficulty levels (beginner, intermediate, advanced)
+- Verb categories (motion verbs, reflexive verbs, etc.)
+- Audio pronunciation
+- Past and future tense conjugations
+- User accounts to save progress
+- Leaderboards and achievements
+
+## 🙏 Acknowledgements
+
+Special appreciation to [Slovarish](https://tabidots.github.io/slovarish) that inspired this project
