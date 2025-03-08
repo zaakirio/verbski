@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Source+Serif+Pro:wght@300;400;600;700&display=swap');
 
+.history-correct-answer {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #60bd86;
+  font-style: italic;
+}
 
 .history-correct-answer {
   margin-top: 0.5rem;
@@ -11,13 +17,20 @@
 .russian-game-container {
   background-color: #f0f5f9;
   background-image: linear-gradient(135deg, #f0f5f9 0%, #e4edf5 100%);
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   font-family: 'Source Serif Pro', serif;
   color: #334756;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .russian-game-container {
+    padding: 1rem;
+  }
 }
 
 .game-header {
@@ -95,6 +108,40 @@
   gap: 1.5rem;
   height: calc(100vh - 120px);
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .game-content {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .history-section {
+    display: none;
+  }
+  
+  .main-game-area {
+    min-height: calc(100vh - 120px);
+  }
+  
+  .game-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .game-stats {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  
+  .verb-conjugation {
+    font-size: 2.75rem;
+  }
+  
+  .pronoun-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .main-game-area {
@@ -189,6 +236,23 @@
   border: 1px solid rgba(222, 235, 248, 0.8);
 }
 
+@media (max-width: 768px) {
+  .game-area {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+  
+  .pronoun-button {
+    font-size: 1.4rem;
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .feedback {
+    height: 2rem;
+    font-size: 1.1rem;
+  }
+}
+
 .verb-display {
   text-align: center;
   margin-bottom: 2.5rem;
@@ -212,6 +276,7 @@
 .feedback {
   height: 2rem;
   font-size: 1.25rem;
+  transition: all 0.3s ease;
 }
 
 .animate-fadeIn {
@@ -219,8 +284,32 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback-correct {
+  color: #2f855a;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.answer-correct-effect {
+  animation: correctPulse 0.8s ease;
+}
+
+@keyframes correctPulse {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.05); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.verb-conjugation.highlight {
+  color: #38a169;
+  text-shadow: 0 0 8px rgba(56, 161, 105, 0.3);
+  transition: all 0.3s ease;
 }
 
 .pronoun-options {
@@ -285,7 +374,7 @@
   flex-direction: column;
   gap: 0.75rem;
   flex-grow: 1;
-  padding-right: 0.5rem;
+  padding-right: 0.5rem; 
 }
 
 .history-item {

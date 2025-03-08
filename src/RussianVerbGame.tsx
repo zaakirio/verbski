@@ -3,6 +3,7 @@ import './RussianVerbGame.css';
 import verbsData from './assets/verbs.json';
 import { Verb, HistoryItem } from './types';
 
+
 const pronounDisplay: { [key: string]: string } = {
   ya: "я",
   ti: "ты",
@@ -26,21 +27,40 @@ const RussianVerbGame: React.FC = () => {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [streak, setStreak] = useState<number>(0);
-  
+  const [correctButton, setCorrectButton] = useState<string | null>(null);
+
+  const isMobileDevice = () => {
+    return window.innerWidth <= 768;
+  };
+
+  const [isMobile, setIsMobile] = useState<boolean>(isMobileDevice());
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(isMobileDevice());
+    };
+
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
   useEffect(() => {
     setVerbs(verbsData.verbs);
   }, []);
-  
+
   const getRandomVerbAndConjugation = () => {
     if (verbs.length === 0) return;
-    
+
     const randomVerbIndex = Math.floor(Math.random() * verbs.length);
     const verb = verbs[randomVerbIndex];
-    
+
     const pronouns = Object.keys(verb.conjugations) as Array<keyof typeof verb.conjugations>;
     const randomPronounIndex = Math.floor(Math.random() * pronouns.length);
     const pronoun = pronouns[randomPronounIndex];
-    
+
     setCurrentVerb(verb);
     setCurrentConjugation(verb.conjugations[pronoun]);
     setCorrectPronoun(pronoun);
@@ -52,7 +72,7 @@ const RussianVerbGame: React.FC = () => {
       alert("Error loading verbs data. Please try again later.");
       return;
     }
-    
+
     setGameStarted(true);
     setScore(0);
     setTotalAttempts(0);
@@ -63,31 +83,55 @@ const RussianVerbGame: React.FC = () => {
 
   const checkAnswer = (selectedPronoun: string) => {
     const isCorrect = selectedPronoun === correctPronoun;
-    
+
     if (isCorrect) {
+      setCorrectButton(selectedPronoun);
       setScore(score + 1);
       setStreak(streak + 1);
-      setFeedback(`${CORRECT_EMOJI} Correct!`);
+
+      // More impactful correct feedback with dynamic celebration messages
+      const celebrations = [
+        "✅ Отлично! (Excellent!)",
+        "✅ Правильно! (Correct!)",
+        "✅ Молодец! (Well done!)",
+        "✅ Превосходно! (Superb!)",
+        "✅ Так держать! (Keep it up!)"
+      ];
+      const randomCelebration = celebrations[Math.floor(Math.random() * celebrations.length)];
+      setFeedback(randomCelebration);
+
+      // Apply highlight effect to the verb
+      if (document.querySelector('.verb-conjugation')) {
+        document.querySelector('.verb-conjugation')?.classList.add('highlight');
+        document.querySelector('.verb-display')?.classList.add('answer-correct-effect');
+
+        // Remove the effect after animation completes
+        setTimeout(() => {
+          document.querySelector('.verb-conjugation')?.classList.remove('highlight');
+          document.querySelector('.verb-display')?.classList.remove('answer-correct-effect');
+          setCorrectButton(null);
+        }, 1000);
+      }
     } else {
-      setFeedback(`${INCORRECT_EMOJI} Incorrect. The correct answer is ${pronounDisplay[correctPronoun]}`);
+      setFeedback(`❌ Incorrect. The correct answer is ${pronounDisplay[correctPronoun]}`);
       setStreak(0);
     }
-    
+
     setTotalAttempts(totalAttempts + 1);
-    
+
     const newHistoryItem: HistoryItem = {
-      verb: currentVerb?.infinitive || "",
+      verb: `${currentVerb?.infinitive} (${currentVerb?.english})`,
       conjugation: currentConjugation,
       pronoun: selectedPronoun,
       isCorrect,
       correctPronoun: correctPronoun
     };
-    
+
     setHistory([newHistoryItem, ...history]);
-    
+
     setTimeout(() => {
       getRandomVerbAndConjugation();
-    }, 1500);
+    }, isCorrect ? 1800 : 1500); // Slightly longer delay for correct answers to enjoy the feedback
   };
 
   useEffect(() => {
@@ -98,7 +142,8 @@ const RussianVerbGame: React.FC = () => {
 
   const renderStreakCounter = () => {
     if (streak < 1) return null;
-    
+
+    // Get encouraging message based on streak
     const getStreakMessage = () => {
       if (streak >= 10) return "🔥 отличный!";
       if (streak >= 7) return "✨";
@@ -106,7 +151,16 @@ const RussianVerbGame: React.FC = () => {
       if (streak >= 3) return "👍";
       return "🎮";
     };
-    
+
+    // On mobile, show more compact version
+    if (isMobile && streak < 3) {
+      return (
+        <div className="streak-counter">
+          <span className="streak-count">{streak}</span>
+        </div>
+      );
+    }
+
     return (
       <div className="streak-counter">
         <span className="streak-count">{streak}</span>
@@ -126,7 +180,7 @@ const RussianVerbGame: React.FC = () => {
         <div className="start-screen">
           <h2>Ready to learn Russian verbs? 📚</h2>
           <p>You'll be shown a conjugated verb form and need to select the matching pronoun.</p>
-          <button 
+          <button
             className="start-button"
             onClick={startGame}
           >
@@ -154,18 +208,18 @@ const RussianVerbGame: React.FC = () => {
 
             <div className="game-area">
               <div className="verb-display">
-                <div className="verb-infinitive">{currentVerb?.infinitive}</div>
+                <div className="verb-infinitive">{currentVerb?.infinitive} ({currentVerb?.english})</div>
                 <div className="verb-conjugation">{currentConjugation}</div>
                 <div className="feedback">
-                  {feedback && <div className="animate-fadeIn">{feedback}</div>}
+                  {feedback && <div className={`animate-fadeIn ${feedback.includes('✅') ? 'feedback-correct' : ''}`}>{feedback}</div>}
                 </div>
               </div>
 
               <div className="pronoun-options">
                 {Object.entries(pronounDisplay).map(([key, display]) => (
-                  <button 
-                    key={key} 
-                    className="pronoun-button"
+                  <button
+                    key={key}
+                    className={`pronoun-button ${correctButton === key ? 'correct-choice' : ''}`}
                     onClick={() => checkAnswer(key)}
                   >
                     {display}
@@ -175,39 +229,42 @@ const RussianVerbGame: React.FC = () => {
             </div>
           </div>
 
-          <div className="history-section">
-            <h3>Verb History</h3>
-            <div className="history-list">
-              {history.map((item, index) => (
-                <div 
-                  key={index} 
-                  className={`history-item ${item.isCorrect ? 'correct' : 'incorrect'}`}
-                >
-                  <div className="history-top">
-                    <span className="history-emoji">
-                      {item.isCorrect ? CORRECT_EMOJI : INCORRECT_EMOJI}
-                    </span>
-                    <span className="history-verb">{item.verb}</span>
-                  </div>
-                  <div className="history-content">
-                    <span className="history-conjugation">{item.conjugation}</span>
-                    <div className="history-answer">
-                      <span className="history-arrow">→</span>
-                      <span className="history-pronoun">{pronounDisplay[item.pronoun]}</span>
+          {!isMobile && (
+            <div className="history-section">
+              <h3>Verb History</h3>
+              <div className="history-list">
+                {history.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`history-item ${item.isCorrect ? 'correct' : 'incorrect'}`}
+                  >
+                    <div className="history-top">
+                      <span className="history-emoji">
+                        {item.isCorrect ? CORRECT_EMOJI : INCORRECT_EMOJI}
+                      </span>
+                      <span className="history-verb">{item.verb}</span>
                     </div>
-                  </div>
-                  {!item.isCorrect && (
-                    <div className="history-correct-answer">
-                      Correct: {pronounDisplay[item.correctPronoun]}
+                    <div className="history-content">
+                      <span className="history-conjugation">{item.conjugation}</span>
+                      <div className="history-answer">
+                        <span className="history-arrow">→</span>
+                        <span className="history-pronoun">{pronounDisplay[item.pronoun]}</span>
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
+                    {!item.isCorrect && (
+                      <div className="history-correct-answer">
+                        Correct: {pronounDisplay[item.correctPronoun]}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       )}
-        </div>
-      )}
+    </div>
+  );
+};
 
 export default RussianVerbGame;

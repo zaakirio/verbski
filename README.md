@@ -1,7 +1,6 @@
 # Verbski: A Russian Verb Conjugation Game
 
 ## 🎮 Game Overview
-🔴 https://verbski.netlify.app/
 
 Verbski presents you with a conjugated Russian verb and challenges you to select the correct personal pronoun (я, ты, он/она/оно, etc.) that matches it. The game tracks your score, keeps a history of your attempts, and provides immediate feedback to enhance the learning process.
 

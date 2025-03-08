@@ -1,5 +1,6 @@
 export interface Verb {
   infinitive: string;
+  english: string;
   conjugations: {
     ya: string;
     ti: string;
