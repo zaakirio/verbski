@@ -1,0 +1,543 @@
+{
+    "verbs": [
+      {
+        "infinitive": "делать (to do)",
+        "conjugations": {
+          "ya": "делаю",
+          "ti": "делаешь",
+          "on_ona_ono": "делает",
+          "mi": "делаем",
+          "vi": "делаете",
+          "oni": "делают"
+        }
+      },
+      {
+        "infinitive": "говорить (to speak)",
+        "conjugations": {
+          "ya": "говорю",
+          "ti": "говоришь",
+          "on_ona_ono": "говорит",
+          "mi": "говорим",
+          "vi": "говорите",
+          "oni": "говорят"
+        }
+      },
+      {
+        "infinitive": "читать (to read)",
+        "conjugations": {
+          "ya": "читаю",
+          "ti": "читаешь",
+          "on_ona_ono": "читает",
+          "mi": "читаем",
+          "vi": "читаете",
+          "oni": "читают"
+        }
+      },
+      {
+        "infinitive": "писать (to write)",
+        "conjugations": {
+          "ya": "пишу",
+          "ti": "пишешь",
+          "on_ona_ono": "пишет",
+          "mi": "пишем",
+          "vi": "пишете",
+          "oni": "пишут"
+        }
+      },
+      {
+        "infinitive": "идти (to go)",
+        "conjugations": {
+          "ya": "иду",
+          "ti": "идешь",
+          "on_ona_ono": "идет",
+          "mi": "идем",
+          "vi": "идете",
+          "oni": "идут"
+        }
+      },
+      {
+        "infinitive": "видеть (to see)",
+        "conjugations": {
+          "ya": "вижу",
+          "ti": "видишь",
+          "on_ona_ono": "видит",
+          "mi": "видим",
+          "vi": "видите",
+          "oni": "видят"
+        }
+      },
+      {
+        "infinitive": "знать (to know)",
+        "conjugations": {
+          "ya": "знаю",
+          "ti": "знаешь",
+          "on_ona_ono": "знает",
+          "mi": "знаем",
+          "vi": "знаете",
+          "oni": "знают"
+        }
+      },
+      {
+        "infinitive": "думать (to think)",
+        "conjugations": {
+          "ya": "думаю",
+          "ti": "думаешь",
+          "on_ona_ono": "думает",
+          "mi": "думаем",
+          "vi": "думаете",
+          "oni": "думают"
+        }
+      },
+      {
+        "infinitive": "жить (to live)",
+        "conjugations": {
+          "ya": "живу",
+          "ti": "живешь",
+          "on_ona_ono": "живет",
+          "mi": "живем",
+          "vi": "живете",
+          "oni": "живут"
+        }
+      },
+      {
+        "infinitive": "любить (to love)",
+        "conjugations": {
+          "ya": "люблю",
+          "ti": "любишь",
+          "on_ona_ono": "любит",
+          "mi": "любим",
+          "vi": "любите",
+          "oni": "любят"
+        }
+      },
+      {
+        "infinitive": "учиться (to study/learn)",
+        "conjugations": {
+          "ya": "учусь",
+          "ti": "учишься",
+          "on_ona_ono": "учится",
+          "mi": "учимся",
+          "vi": "учитесь",
+          "oni": "учатся"
+        }
+      },
+      {
+        "infinitive": "быть (to be)",
+        "conjugations": {
+          "ya": "есть",
+          "ti": "есть",
+          "on_ona_ono": "есть",
+          "mi": "есть",
+          "vi": "есть",
+          "oni": "есть"
+        }
+      },
+      {
+        "infinitive": "ехать (to go by transport)",
+        "conjugations": {
+          "ya": "еду",
+          "ti": "едешь",
+          "on_ona_ono": "едет",
+          "mi": "едем",
+          "vi": "едете",
+          "oni": "едут"
+        }
+      },
+      {
+        "infinitive": "хотеть (to want)",
+        "conjugations": {
+          "ya": "хочу",
+          "ti": "хочешь",
+          "on_ona_ono": "хочет",
+          "mi": "хотим",
+          "vi": "хотите",
+          "oni": "хотят"
+        }
+      },
+      {
+        "infinitive": "есть (to eat)",
+        "conjugations": {
+          "ya": "ем",
+          "ti": "ешь",
+          "on_ona_ono": "ест",
+          "mi": "едим",
+          "vi": "едите",
+          "oni": "едят"
+        }
+      },
+      {
+        "infinitive": "мочь (to be able to)",
+        "conjugations": {
+          "ya": "могу",
+          "ti": "можешь",
+          "on_ona_ono": "может",
+          "mi": "можем",
+          "vi": "можете",
+          "oni": "могут"
+        }
+      },
+      {
+        "infinitive": "ходить (to walk/go)",
+        "conjugations": {
+          "ya": "хожу",
+          "ti": "ходишь",
+          "on_ona_ono": "ходит",
+          "mi": "ходим",
+          "vi": "ходите",
+          "oni": "ходят"
+        }
+      },
+      {
+        "infinitive": "пить (to drink)",
+        "conjugations": {
+          "ya": "пью",
+          "ti": "пьешь",
+          "on_ona_ono": "пьет",
+          "mi": "пьем",
+          "vi": "пьете",
+          "oni": "пьют"
+        }
+      },
+      {
+        "infinitive": "брать (to take)",
+        "conjugations": {
+          "ya": "беру",
+          "ti": "берешь",
+          "on_ona_ono": "берет",
+          "mi": "берем",
+          "vi": "берете",
+          "oni": "берут"
+        }
+      },
+      {
+        "infinitive": "смотреть (to watch/look)",
+        "conjugations": {
+          "ya": "смотрю",
+          "ti": "смотришь",
+          "on_ona_ono": "смотрит",
+          "mi": "смотрим",
+          "vi": "смотрите",
+          "oni": "смотрят"
+        }
+      },
+      {
+        "infinitive": "учить (to teach/learn)",
+        "conjugations": {
+          "ya": "учу",
+          "ti": "учишь",
+          "on_ona_ono": "учит",
+          "mi": "учим",
+          "vi": "учите",
+          "oni": "учат"
+        }
+      },
+      {
+        "infinitive": "спать (to sleep)",
+        "conjugations": {
+          "ya": "сплю",
+          "ti": "спишь",
+          "on_ona_ono": "спит",
+          "mi": "спим",
+          "vi": "спите",
+          "oni": "спят"
+        }
+      },
+      {
+        "infinitive": "ждать (to wait)",
+        "conjugations": {
+          "ya": "жду",
+          "ti": "ждешь",
+          "on_ona_ono": "ждет",
+          "mi": "ждем",
+          "vi": "ждете",
+          "oni": "ждут"
+        }
+      },
+      {
+        "infinitive": "отдыхать (to rest)",
+        "conjugations": {
+          "ya": "отдыхаю",
+          "ti": "отдыхаешь",
+          "on_ona_ono": "отдыхает",
+          "mi": "отдыхаем",
+          "vi": "отдыхаете",
+          "oni": "отдыхают"
+        }
+      },
+      {
+        "infinitive": "мыть (to wash)",
+        "conjugations": {
+          "ya": "мою",
+          "ti": "моешь",
+          "on_ona_ono": "моет",
+          "mi": "моем",
+          "vi": "моете",
+          "oni": "моют"
+        }
+      },
+      {
+        "infinitive": "помнить (to remember)",
+        "conjugations": {
+          "ya": "помню",
+          "ti": "помнишь",
+          "on_ona_ono": "помнит",
+          "mi": "помним",
+          "vi": "помните",
+          "oni": "помнят"
+        }
+      },
+      {
+        "infinitive": "заниматься (to study/be engaged in)",
+        "conjugations": {
+          "ya": "занимаюсь",
+          "ti": "занимаешься",
+          "on_ona_ono": "занимается",
+          "mi": "занимаемся",
+          "vi": "занимаетесь",
+          "oni": "занимаются"
+        }
+      },
+      {
+        "infinitive": "давать (to give)",
+        "conjugations": {
+          "ya": "даю",
+          "ti": "даешь",
+          "on_ona_ono": "дает",
+          "mi": "даем",
+          "vi": "даете",
+          "oni": "дают"
+        }
+      },
+      {
+        "infinitive": "готовить (to cook)",
+        "conjugations": {
+          "ya": "готовлю",
+          "ti": "готовишь",
+          "on_ona_ono": "готовит",
+          "mi": "готовим",
+          "vi": "готовите",
+          "oni": "готовят"
+        }
+      },
+      {
+        "infinitive": "сидеть (to sit)",
+        "conjugations": {
+          "ya": "сижу",
+          "ti": "сидишь",
+          "on_ona_ono": "сидит",
+          "mi": "сидим",
+          "vi": "сидите",
+          "oni": "сидят"
+        }
+      },
+      {
+        "infinitive": "вставать (to get up)",
+        "conjugations": {
+          "ya": "встаю",
+          "ti": "встаешь",
+          "on_ona_ono": "встает",
+          "mi": "встаем",
+          "vi": "встаете",
+          "oni": "встают"
+        }
+      },
+      {
+        "infinitive": "вести (to lead)",
+        "conjugations": {
+          "ya": "веду",
+          "ti": "ведешь",
+          "on_ona_ono": "ведет",
+          "mi": "ведем",
+          "vi": "ведете",
+          "oni": "ведут"
+        }
+      },
+      {
+        "infinitive": "помогать (to help)",
+        "conjugations": {
+          "ya": "помогаю",
+          "ti": "помогаешь",
+          "on_ona_ono": "помогает",
+          "mi": "помогаем",
+          "vi": "помогаете",
+          "oni": "помогают"
+        }
+      },
+      {
+        "infinitive": "изучать (to study/investigate)",
+        "conjugations": {
+          "ya": "изучаю",
+          "ti": "изучаешь",
+          "on_ona_ono": "изучает",
+          "mi": "изучаем",
+          "vi": "изучаете",
+          "oni": "изучают"
+        }
+      },
+      {
+        "infinitive": "петь (to sing)",
+        "conjugations": {
+          "ya": "пою",
+          "ti": "поёшь",
+          "on_ona_ono": "поёт",
+          "mi": "поём",
+          "vi": "поёте",
+          "oni": "поют"
+        }
+      },
+      {
+        "infinitive": "стоять (to stand)",
+        "conjugations": {
+          "ya": "стою",
+          "ti": "стоишь",
+          "on_ona_ono": "стоит",
+          "mi": "стоим",
+          "vi": "стоите",
+          "oni": "стоят"
+        }
+      },
+      {
+        "infinitive": "лежать (to lie down)",
+        "conjugations": {
+          "ya": "лежу",
+          "ti": "лежишь",
+          "on_ona_ono": "лежит",
+          "mi": "лежим",
+          "vi": "лежите",
+          "oni": "лежат"
+        }
+      },
+      {
+        "infinitive": "понимать (to understand)",
+        "conjugations": {
+          "ya": "понимаю",
+          "ti": "понимаешь",
+          "on_ona_ono": "понимает",
+          "mi": "понимаем",
+          "vi": "понимаете",
+          "oni": "понимают"
+        }
+      },
+      {
+        "infinitive": "носить (to wear/carry)",
+        "conjugations": {
+          "ya": "ношу",
+          "ti": "носишь",
+          "on_ona_ono": "носит",
+          "mi": "носим",
+          "vi": "носите",
+          "oni": "носят"
+        }
+      },
+      {
+        "infinitive": "сказать (to say)",
+        "conjugations": {
+          "ya": "скажу",
+          "ti": "скажешь",
+          "on_ona_ono": "скажет",
+          "mi": "скажем",
+          "vi": "скажете",
+          "oni": "скажут"
+        }
+      },
+      {
+        "infinitive": "работать (to work)",
+        "conjugations": {
+          "ya": "работаю",
+          "ti": "работаешь",
+          "on_ona_ono": "работает",
+          "mi": "работаем",
+          "vi": "работаете",
+          "oni": "работают"
+        }
+      },
+      {
+        "infinitive": "найти (to find)",
+        "conjugations": {
+          "ya": "нахожу",
+          "ti": "находишь",
+          "on_ona_ono": "находит",
+          "mi": "находим",
+          "vi": "находите",
+          "oni": "находят"
+        }
+      },
+      {
+        "infinitive": "танцевать (to dance)",
+        "conjugations": {
+          "ya": "танцую",
+          "ti": "танцуешь",
+          "on_ona_ono": "танцует",
+          "mi": "танцуем",
+          "vi": "танцуете",
+          "oni": "танцуют"
+        }
+      },
+      {
+        "infinitive": "звонить (to call)",
+        "conjugations": {
+          "ya": "звоню",
+          "ti": "звонишь",
+          "on_ona_ono": "звонит",
+          "mi": "звоним",
+          "vi": "звоните",
+          "oni": "звонят"
+        }
+      },
+      {
+        "infinitive": "нести (to carry)",
+        "conjugations": {
+          "ya": "несу",
+          "ti": "несешь",
+          "on_ona_ono": "несет",
+          "mi": "несем",
+          "vi": "несете",
+          "oni": "несут"
+        }
+      },
+      {
+        "infinitive": "покупать (to buy)",
+        "conjugations": {
+          "ya": "покупаю",
+          "ti": "покупаешь",
+          "on_ona_ono": "покупает",
+          "mi": "покупаем",
+          "vi": "покупаете",
+          "oni": "покупают"
+        }
+      },
+      {
+        "infinitive": "начинать (to begin)",
+        "conjugations": {
+          "ya": "начинаю",
+          "ti": "начинаешь",
+          "on_ona_ono": "начинает",
+          "mi": "начинаем",
+          "vi": "начинаете",
+          "oni": "начинают"
+        }
+      },
+      {
+        "infinitive": "слушать (to listen)",
+        "conjugations": {
+          "ya": "слушаю",
+          "ti": "слушаешь",
+          "on_ona_ono": "слушает",
+          "mi": "слушаем",
+          "vi": "слушаете",
+          "oni": "слушают"
+        }
+      },
+      {
+        "infinitive": "спрашивать (to ask)",
+        "conjugations": {
+          "ya": "спрашиваю",
+          "ti": "спрашиваешь",
+          "on_ona_ono": "спрашивает",
+          "mi": "спрашиваем",
+          "vi": "спрашиваете",
+          "oni": "спрашивают"
+        }
+      }
+    ]
+  }
