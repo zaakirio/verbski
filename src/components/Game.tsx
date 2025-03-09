@@ -74,7 +74,7 @@ const RussianVerbGame: React.FC = () => {
                 currentVerb={currentVerb}
                 currentConjugation={currentConjugation}
                 feedback={feedback}
-                correctPronoun={correctPronoun} />
+              />
               <PronounOptions
                 checkAnswer={checkAnswer}
                 correctButton={correctButton}

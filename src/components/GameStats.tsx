@@ -43,7 +43,10 @@ export const GameStats: React.FC<GameStatsProps> = ({ score, totalAttempts, stre
         <span className="score-value">Score: </span>
         <span className="score-label">{score} - {losses}</span>
         {totalAttempts > 0 && (
-          <span className="percentage">
+          <span className={`percentage ${score / totalAttempts < 0.3 ? 'percentage-low' :
+              score / totalAttempts < 0.55 ? 'percentage-medium' :
+                'percentage-high'
+            }`}>
             {Math.round((score / totalAttempts) * 100)}%
           </span>
         )}
