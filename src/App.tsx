@@ -1,9 +1,9 @@
 import React from 'react';
-import RussianVerbGame from './RussianVerbGame';
+import Game from './components/Game';
 
 const App: React.FC = () => {
   return (
-      <RussianVerbGame />
+    <Game />
   );
 };
 
