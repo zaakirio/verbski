@@ -177,7 +177,7 @@
 
 .score-value {
   color: #1e4976;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1.3rem;
 }
 
@@ -481,4 +481,33 @@
   font-size: 14px;
   color: #888;
   margin-top: 5px;
+}
+
+.verb-conjugation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.audio-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.audio-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #000;
+}
+
+.conjugation-text:hover {
+  text-decoration: underline;
 }

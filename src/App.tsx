@@ -1,10 +1,14 @@
-import React from 'react';
+import { AudioProvider } from './contexts/AudioContext';
 import Game from './components/Game';
 
-const App: React.FC = () => {
+function App() {
   return (
-    <Game />
+    <AudioProvider>
+      <div className="App">
+        <Game />
+      </div>
+    </AudioProvider>
   );
-};
+}
 
 export default App;

@@ -8,6 +8,8 @@ interface GameStatsProps {
 }
 
 export const GameStats: React.FC<GameStatsProps> = ({ score, totalAttempts, streak, isMobile }) => {
+  const losses = totalAttempts - score;
+
   const renderStreakCounter = () => {
     if (streak < 1) return null;
 
@@ -38,9 +40,8 @@ export const GameStats: React.FC<GameStatsProps> = ({ score, totalAttempts, stre
   return (
     <div className="game-stats">
       <div className="score">
-        <span className="score-label">Score: </span>
-        <span className="score-value">{score}</span>
-        <span className="score-denominator">/{totalAttempts} </span>
+        <span className="score-value">Score: </span>
+        <span className="score-label">{score} - {losses}</span>
         {totalAttempts > 0 && (
           <span className="percentage">
             {Math.round((score / totalAttempts) * 100)}%

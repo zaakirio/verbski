@@ -47,7 +47,8 @@ const RussianVerbGame: React.FC = () => {
     correctButton,
     isAcceptingInput,
     startGame,
-    checkAnswer
+    checkAnswer,
+    correctPronoun
   } = useGameLogic(verbs);
 
   useKeyboardNavigation(gameStarted, checkAnswer, isAcceptingInput);
@@ -73,7 +74,7 @@ const RussianVerbGame: React.FC = () => {
                 currentVerb={currentVerb}
                 currentConjugation={currentConjugation}
                 feedback={feedback}
-              />
+                correctPronoun={correctPronoun} />
               <PronounOptions
                 checkAnswer={checkAnswer}
                 correctButton={correctButton}
