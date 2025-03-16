@@ -14,7 +14,13 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
   currentConjugation, 
   feedback
 }) => {
-  const { isMuted, isPlaying, toggleMute, playAudio } = useAudio();
+  const { 
+    isMuted, 
+    isPlaying, 
+    toggleMute, 
+    playAudio, 
+  } = useAudio();
+  
   const conjugationRef = useRef<HTMLSpanElement>(null);
   const [fontSize, setFontSize] = useState<number>(2.5); // Default size in rem
   
@@ -70,13 +76,13 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
         >
           {currentConjugation}
         </span>
-        <button 
-          className={`audio-button ${isPlaying ? 'playing' : ''}`}
-          onClick={toggleMute}
-          aria-label={isMuted ? "Enable audio" : "Disable audio"}
-        >
-          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        </button>
+          <button 
+            className={`audio-button ${isPlaying ? 'playing' : ''}`}
+            onClick={toggleMute}
+            aria-label={isMuted ? "Enable audio" : "Disable audio"}
+          >
+            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          </button>
       </div>
       <div className="feedback">
         {feedback && <div className={`animate-fadeIn ${feedback.includes('✅') ? 'feedback-correct' : ''}`}>{feedback}</div>}
