@@ -166,7 +166,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 setIsPlaying(false);
             };
 
-            newUtterance.onerror = (event) => {
+            newUtterance.onerror = () => {
                 // console.error('Speech synthesis error:', event);
                 setIsPlaying(false);
             };
@@ -227,7 +227,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 URL.revokeObjectURL(url); // Clean up the blob URL
             };
             
-            audio.onerror = (event) => {
+            audio.onerror = () => {
                 // console.error('ElevenLabs audio error:', event);
                 setIsPlaying(false);
                 URL.revokeObjectURL(url); // Clean up the blob URL
