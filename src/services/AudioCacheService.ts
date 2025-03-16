@@ -129,13 +129,13 @@ export class AudioCacheService {
     private loadFromLocalStorage(): void {
       try {
         // Get all keys from localStorage
-    //    const keys = Object.keys(localStorage);
+       const keys = Object.keys(localStorage);
         
         // Filter audio cache keys
-      //  const audioCacheKeys = keys.filter(key => key.startsWith(this.cacheKeyPrefix));
+       const audioCacheKeys = keys.filter(key => key.startsWith(this.cacheKeyPrefix));
         
         // Report cache status
-       // console.log(`Found ${audioCacheKeys.length} cached audio items in localStorage`);
+       console.log(`Found ${audioCacheKeys.length} cached audio items in localStorage`);
         
         // We don't actually load the items into memory here to save memory
         // They will be loaded on-demand when get() is called
@@ -177,7 +177,7 @@ export class AudioCacheService {
       voiceId: string,
       textToSpeechFn: (text: string, voiceId: string) => Promise<ArrayBuffer>
     ): Promise<void> {
-      // console.log(`Preloading ${commonForms.length} common verb forms...`);
+      console.log(`Preloading ${commonForms.length} common verb forms...`);
       
       let loaded = 0;
       const promises = commonForms.map(async (form) => {
@@ -203,7 +203,7 @@ export class AudioCacheService {
       });
       
       await Promise.all(promises);
-     // console.log(`Preloading complete. Cached ${loaded}/${commonForms.length} common forms.`);
+     console.log(`Preloading complete. Cached ${loaded}/${commonForms.length} common forms.`);
     }
   }
   

@@ -74,7 +74,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     useEffect(() => {
         if (isSpeechAvailable && window.speechSynthesis.onvoiceschanged !== undefined) {
             window.speechSynthesis.onvoiceschanged = () => {
-                // console.log('Voices loaded:', window.speechSynthesis.getVoices().length);
+                console.log('Voices loaded:', window.speechSynthesis.getVoices().length);
             };
         }
 
@@ -157,17 +157,17 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
             // Event handlers
             newUtterance.onstart = () => {
-                // console.log('Speech synthesis started:', text);
+                console.log('Speech synthesis started:', text);
                 setIsPlaying(true);
             };
 
             newUtterance.onend = () => {
-                // console.log('Speech synthesis ended:', text);
+                console.log('Speech synthesis ended:', text);
                 setIsPlaying(false);
             };
 
-            newUtterance.onerror = () => {
-                // console.error('Speech synthesis error:', event);
+            newUtterance.onerror = (event) => {
+                console.error('Speech synthesis error:', event);
                 setIsPlaying(false);
             };
 
@@ -189,10 +189,10 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             let audioBuffer: ArrayBuffer;
             
             if (audioCache.has(cacheKey)) {
-                // console.log('Using cached audio for:', text);
+                console.log('Using cached audio for:', text);
                 audioBuffer = audioCache.get(cacheKey)!;
             } else {
-                // console.log('Fetching audio from ElevenLabs for:', text);
+                console.log('Fetching audio from ElevenLabs for:', text);
                 // Fetch from ElevenLabs
                 audioBuffer = await elevenLabsClient.textToSpeech(text, currentVoice);
                 
@@ -217,18 +217,18 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             
             // Set up event handlers
             audio.onplaying = () => {
-                // console.log('ElevenLabs audio started playing:', text);
+                console.log('ElevenLabs audio started playing:', text);
                 setIsPlaying(true);
             };
             
             audio.onended = () => {
-                // console.log('ElevenLabs audio ended:', text);
+                console.log('ElevenLabs audio ended:', text);
                 setIsPlaying(false);
                 URL.revokeObjectURL(url); // Clean up the blob URL
             };
             
-            audio.onerror = () => {
-                // console.error('ElevenLabs audio error:', event);
+            audio.onerror = (event) => {
+                console.error('ElevenLabs audio error:', event);
                 setIsPlaying(false);
                 URL.revokeObjectURL(url); // Clean up the blob URL
             };
@@ -260,7 +260,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // Main play audio function
     const playAudio = useCallback(async (text: string): Promise<void> => {
         if (isMuted) {
-            // console.log('Audio is muted, not playing');
+            console.log('Audio is muted, not playing');
             return;
         }
 
