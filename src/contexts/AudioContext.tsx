@@ -1,12 +1,14 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
-import { elevenLabsClient } from '../services/ElevenLabsClient';
+import elevenLabsClient, { Voice } from '../services/elevenLabsClient';
+// Import the functional ElevenLabs client instead of the class-based one
 
+// AudioContext type definition
 interface AudioContextType {
     isMuted: boolean;
     isPlaying: boolean;
     isElevenLabsEnabled: boolean;
     currentVoice: string;
-    availableVoices: { id: string; name: string }[];
+    availableVoices: Voice[];
     toggleMute: () => void;
     playAudio: (text: string) => Promise<void>;
     stopAudio: () => void;
@@ -14,7 +16,11 @@ interface AudioContextType {
     setCurrentVoice: (voiceId: string) => void;
 }
 
-export const AudioContext = createContext<AudioContextType>({
+interface AudioProviderProps {
+    children: ReactNode;
+}
+
+const AudioContext = createContext<AudioContextType>({
     isMuted: false,
     isPlaying: false,
     isElevenLabsEnabled: false,
@@ -27,7 +33,7 @@ export const AudioContext = createContext<AudioContextType>({
     setCurrentVoice: () => { }
 });
 
-export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
     const [isMuted, setIsMuted] = useState<boolean>(() =>
         localStorage.getItem('verbski-audio-muted') === 'true'
     );
@@ -42,7 +48,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const [currentVoice, setCurrentVoice] = useState<string>(() => 
         localStorage.getItem('verbski-elevenlabs-voice') || '21m00Tcm4TlvDq8ikWAM' // Default to Rachel
     );
-    const [availableVoices, setAvailableVoices] = useState<{id: string; name: string}[]>([]);
+    const [availableVoices, setAvailableVoices] = useState<Voice[]>([]);
     const [audioCache] = useState<Map<string, ArrayBuffer>>(new Map());
     
     // Speech Synthesis
@@ -52,6 +58,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     useEffect(() => {
         const loadVoices = async () => {
             try {
+                // Use the functional client's method
                 const voices = await elevenLabsClient.getAvailableVoices();
                 setAvailableVoices(voices);
                 
@@ -142,7 +149,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }, []);
 
     // Play audio using Speech Synthesis
-    const playSpeechSynthesis = useCallback((text: string) => {
+    const playSpeechSynthesis = useCallback((text: string): boolean => {
         if (!isSpeechAvailable) return false;
         
         try {
@@ -186,14 +193,14 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             const cacheKey = `${text}_${currentVoice}`;
             
             // Check if we have this audio cached
-            let audioBuffer: ArrayBuffer;
+            let audioBuffer;
             
             if (audioCache.has(cacheKey)) {
                 console.log('Using cached audio for:', text);
-                audioBuffer = audioCache.get(cacheKey)!;
+                audioBuffer = audioCache.get(cacheKey);
             } else {
                 console.log('Fetching audio from ElevenLabs for:', text);
-                // Fetch from ElevenLabs
+                // Fetch from ElevenLabs using the functional client
                 audioBuffer = await elevenLabsClient.textToSpeech(text, currentVoice);
                 
                 // Cache the result
@@ -208,10 +215,11 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             } else {
                 // Stop any currently playing audio
                 audio.pause();
-                audio.currentTime = 0;
+                audio.currentTime =.0;
             }
             
             // Convert the array buffer to a Blob
+            if(audioBuffer){
             const blob = new Blob([audioBuffer], { type: 'audio/mpeg' });
             const url = URL.createObjectURL(blob);
             
@@ -236,14 +244,16 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             // Set the source and play
             audio.src = url;
             await audio.play();
-            
-            return true;
+        }
+        return true;
+
         } catch (error) {
             console.error('Error playing ElevenLabs audio:', error);
             setIsPlaying(false);
             return false;
         }
     }, [audioElement, currentVoice, audioCache]);
+
     // Stop audio function
     const stopAudio = useCallback(() => {
         if (isSpeechAvailable) {
@@ -257,6 +267,7 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         
         setIsPlaying(false);
     }, [isSpeechAvailable, audioElement]);
+
     // Main play audio function
     const playAudio = useCallback(async (text: string): Promise<void> => {
         if (isMuted) {
@@ -279,8 +290,6 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         // Use speech synthesis as fallback
         playSpeechSynthesis(text);
     }, [isMuted, isElevenLabsEnabled, playElevenLabsAudio, playSpeechSynthesis, stopAudio]);
-
-
 
     const value = {
         isMuted,

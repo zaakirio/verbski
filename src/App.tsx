@@ -1,7 +1,6 @@
 import { AudioProvider } from './contexts/AudioContext';
 import Game from './components/Game';
-import './services/ElevenLabsClient';
-import './services/AudioCacheService';
+;
 
 function App() {
   return (
