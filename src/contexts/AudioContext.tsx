@@ -36,6 +36,7 @@ const AudioContext = createContext<AudioContextType>({
 });
 
 export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
+    console.log("DO WE ENTER AUDIO CONTEXT")
     const [isMuted, setIsMuted] = useState<boolean>(() =>
         localStorage.getItem('verbski-audio-muted') === 'true'
     );
@@ -60,6 +61,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
     useEffect(() => {
         const loadVoices = async () => {
             try {
+                console.log(`111 - ${isElevenLabsEnabled}`)
                 // Use the functional client's method
                 const voices = await getAvailableVoices();
                 setAvailableVoices(voices);
@@ -102,6 +104,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
 
     // Monitor speech synthesis status
     useEffect(() => {
+        console.log({isElevenLabsEnabled})
         if (!isPlaying || !isSpeechAvailable || isElevenLabsEnabled) return;
 
         const interval = setInterval(() => {
@@ -123,6 +126,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
       const BASE_URL = "https://elevenlabs.io";
       const API_URL = CORS_PROXY + "https://api.elevenlabs.io";
       let voiceCache: Voice[] | null = null;
+      console.log(API_URL)
       
       /**
        * Converts text to speech using ElevenLabs API and returns the audio as ArrayBuffer
@@ -254,6 +258,8 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
               credentials: 'omit', // Change to omit to avoid sending cookies
               body: JSON.stringify(payload)
             });
+
+            console.log({response})
             
             if (!response.ok) {
               console.warn(`Direct API request failed: ${response.status}`);
@@ -305,7 +311,8 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
             credentials: 'include',
             body: JSON.stringify(payload)
           });
-          
+          console.log({response})
+
           if (!response.ok) {
             console.warn(`Demo request failed: ${response.status}`);
             return null;
@@ -349,6 +356,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
 
     // Toggle ElevenLabs function
     const toggleElevenLabs = useCallback(() => {
+        console.log("toggle")
         setIsElevenLabsEnabled(prev => {
             const newState = !prev;
             localStorage.setItem('verbski-elevenlabs-enabled', newState.toString());
@@ -403,6 +411,7 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
     // Play audio using ElevenLabs
     const playElevenLabsAudio = useCallback(async (text: string): Promise<boolean> => {
         try {
+            console.log("PLAY 11 LABWS")
             // Generate a cache key from the text and voice
             const cacheKey = `${text}_${currentVoice}`;
             
@@ -502,7 +511,12 @@ export const AudioProvider: React.FC<AudioProviderProps> = ({ children }) => {
         }
         
         // Use speech synthesis as fallback
-        playSpeechSynthesis(text);
+        playElevenLabsAudio(text);
+        if(        !playElevenLabsAudio(text)
+    ){
+       playSpeechSynthesis(text);
+
+}
     }, [isMuted, isElevenLabsEnabled, playElevenLabsAudio, playSpeechSynthesis, stopAudio]);
 
     const value = {
