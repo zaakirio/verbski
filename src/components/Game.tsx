@@ -10,6 +10,7 @@ import { PronounOptions } from './PronounOptions';
 import { StartScreen } from './StartScreen';
 import { VerbDisplay } from './VerbDisplay';
 import { Verb } from '../types';
+import { useApi } from '../hooks/useApi';
 
 const RussianVerbGame: React.FC = () => {
   const [verbs, setVerbs] = useState<Verb[]>([]);
@@ -51,6 +52,23 @@ const RussianVerbGame: React.FC = () => {
   } = useGameLogic(verbs);
 
   useKeyboardNavigation(gameStarted, checkAnswer, isAcceptingInput);
+
+  const { saveScore } = useApi();
+
+  const handleGameEnd = async () => {
+    const gameScore = {
+      score: calculateScore(),
+      correct_answers: correctAnswers,
+      total_questions: totalQuestions,
+      personal_pronouns: pronounStats,
+    };
+
+    try {
+      await saveScore(gameScore);
+    } catch (error) {
+      console.error('Failed to save score:', error);
+    }
+  };
 
   return (
     <div className="russian-game-container">
