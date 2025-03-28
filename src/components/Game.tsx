@@ -7,12 +7,13 @@ import { GameHeader } from './GameHeader';
 import { GameStats } from './GameStats';
 import { HistorySection } from './HistorySection';
 import { PronounOptions } from './PronounOptions';
-import { StartScreen } from './StartScreen';
 import { VerbDisplay } from './VerbDisplay';
+import { GameModal } from './GameModal';
 import { Verb } from '../types';
 
 const RussianVerbGame: React.FC = () => {
   const [verbs, setVerbs] = useState<Verb[]>([]);
+  const [showIntro, setShowIntro] = useState(true);
   const isMobileDevice = () => {
     return window.innerWidth <= 768;
   };
@@ -52,40 +53,50 @@ const RussianVerbGame: React.FC = () => {
 
   useKeyboardNavigation(gameStarted, checkAnswer, isAcceptingInput);
 
+  const handleStartGame = () => {
+    setShowIntro(false);
+    startGame();
+  };
+
   return (
     <div className="russian-game-container">
       <GameHeader />
-
-      {!gameStarted ? (
-        <StartScreen startGame={startGame} />
-      ) : (
-        <div className="game-content">
-          <div className="main-game-area">
-            <GameStats
-              score={score}
-              totalAttempts={totalAttempts}
-              streak={streak}
-              isMobile={isMobile}
+      <div className="game-content">
+        <div className="main-game-area">
+          <GameStats
+            score={score}
+            totalAttempts={totalAttempts}
+            streak={streak}
+            isMobile={isMobile}
+          />
+          <div className="game-area">
+            <VerbDisplay
+              currentVerb={currentVerb}
+              currentConjugation={currentConjugation}
+              feedback={feedback}
             />
-
-            <div className="game-area">
-              <VerbDisplay
-                currentVerb={currentVerb}
-                currentConjugation={currentConjugation}
-                feedback={feedback}
-              />
-              <PronounOptions
-                checkAnswer={checkAnswer}
-                correctButton={correctButton}
-              />
-            </div>
+            <PronounOptions
+              checkAnswer={checkAnswer}
+              correctButton={correctButton}
+            />
           </div>
-
-          {!isMobile && (
-            <HistorySection history={history} />
-          )}
         </div>
-      )}
+
+        {!isMobile && (
+          <HistorySection history={history} />
+        )}
+      </div>
+
+      <GameModal isOpen={showIntro} onClose={handleStartGame}>
+        <h2>Ready to learn Russian verbs? 📚</h2>
+        <p>You'll be shown a conjugated verb form and need to select the matching pronoun.</p>
+        <button
+          className="start-button"
+          onClick={handleStartGame}
+        >
+          Start Game
+        </button>
+      </GameModal>
     </div>
   );
 };
