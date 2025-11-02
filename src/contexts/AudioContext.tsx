@@ -1,108 +1,56 @@
-import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
-import { elevenLabsClient } from '../services/ElevenLabsClient';
+import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode, useRef } from 'react';
 
 interface AudioContextType {
     isMuted: boolean;
     isPlaying: boolean;
-    isElevenLabsEnabled: boolean;
-    currentVoice: string;
-    availableVoices: { id: string; name: string }[];
     toggleMute: () => void;
-    playAudio: (text: string) => Promise<void>;
+    playAudio: (infinitive: string, pronoun: string) => Promise<void>;
     stopAudio: () => void;
-    toggleElevenLabs: () => void;
-    setCurrentVoice: (voiceId: string) => void;
+    preloadVerb: (infinitive: string) => void;
 }
 
 export const AudioContext = createContext<AudioContextType>({
     isMuted: false,
     isPlaying: false,
-    isElevenLabsEnabled: false,
-    currentVoice: '',
-    availableVoices: [],
     toggleMute: () => { },
     playAudio: async () => { },
     stopAudio: () => { },
-    toggleElevenLabs: () => { },
-    setCurrentVoice: () => { }
+    preloadVerb: () => { }
 });
+
+// Pronoun keys for preloading all conjugations
+const PRONOUNS = ['ya', 'ti', 'on_ona_ono', 'mi', 'vi', 'oni'];
 
 export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isMuted, setIsMuted] = useState<boolean>(() =>
         localStorage.getItem('verbski-audio-muted') === 'true'
     );
-    
+
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
-    
-    // ElevenLabs specific state
-    const [isElevenLabsEnabled, setIsElevenLabsEnabled] = useState<boolean>(() => 
-        localStorage.getItem('verbski-elevenlabs-enabled') === 'true'
-    );
-    const [currentVoice, setCurrentVoice] = useState<string>(() => 
-        localStorage.getItem('verbski-elevenlabs-voice') || '21m00Tcm4TlvDq8ikWAM' // Default to Rachel
-    );
-    const [availableVoices, setAvailableVoices] = useState<{id: string; name: string}[]>([]);
-    const [audioCache] = useState<Map<string, ArrayBuffer>>(new Map());
-    
-    // Speech Synthesis
-    const isSpeechAvailable = typeof window !== 'undefined' && 'speechSynthesis' in window;
 
-    // Load ElevenLabs voices on component mount
-    useEffect(() => {
-        const loadVoices = async () => {
-            try {
-                const voices = await elevenLabsClient.getAvailableVoices();
-                setAvailableVoices(voices);
-                
-                // If no voice is selected yet, set the first one as default
-                if (!currentVoice && voices.length > 0) {
-                    setCurrentVoice(voices[0].id);
-                    localStorage.setItem('verbski-elevenlabs-voice', voices[0].id);
-                }
-            } catch (error) {
-                console.error('Failed to load ElevenLabs voices:', error);
-            }
-        };
-        
-        if (isElevenLabsEnabled) {
-            loadVoices();
-        }
-    }, [isElevenLabsEnabled, currentVoice]);
+    // Audio element pool for better performance
+    const audioElementRef = useRef<HTMLAudioElement | null>(null);
+    const preloadCacheRef = useRef<Map<string, HTMLAudioElement>>(new Map());
 
-    // Initialize speech synthesis
+    // Initialize audio element
     useEffect(() => {
-        if (isSpeechAvailable && window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = () => {
-                console.log('Voices loaded:', window.speechSynthesis.getVoices().length);
-            };
-        }
+        audioElementRef.current = new Audio();
 
         return () => {
-            if (isSpeechAvailable) {
-                window.speechSynthesis.cancel();
-            }
-            
             // Clean up audio element
-            if (audioElement) {
-                audioElement.pause();
-                audioElement.src = '';
+            if (audioElementRef.current) {
+                audioElementRef.current.pause();
+                audioElementRef.current.src = '';
             }
+
+            // Clean up preload cache
+            preloadCacheRef.current.forEach(audio => {
+                audio.pause();
+                audio.src = '';
+            });
+            preloadCacheRef.current.clear();
         };
-    }, [isSpeechAvailable, audioElement]);
-
-    // Monitor speech synthesis status
-    useEffect(() => {
-        if (!isPlaying || !isSpeechAvailable || isElevenLabsEnabled) return;
-
-        const interval = setInterval(() => {
-            if (!window.speechSynthesis.speaking) {
-                setIsPlaying(false);
-            }
-        }, 100);
-
-        return () => clearInterval(interval);
-    }, [isPlaying, isSpeechAvailable, isElevenLabsEnabled]);
+    }, []);
 
     // Toggle mute function
     const toggleMute = useCallback(() => {
@@ -110,189 +58,147 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             const newState = !prev;
             localStorage.setItem('verbski-audio-muted', newState.toString());
 
-            if (newState) {
-                if (isSpeechAvailable) {
-                    window.speechSynthesis.cancel();
-                }
-                
-                if (audioElement) {
-                    audioElement.pause();
-                }
-                
+            if (newState && audioElementRef.current) {
+                audioElementRef.current.pause();
                 setIsPlaying(false);
             }
 
             return newState;
         });
-    }, [isSpeechAvailable, audioElement]);
+    }, []);
 
-    // Toggle ElevenLabs function
-    const toggleElevenLabs = useCallback(() => {
-        setIsElevenLabsEnabled(prev => {
-            const newState = !prev;
-            localStorage.setItem('verbski-elevenlabs-enabled', newState.toString());
-            return newState;
+    // Construct audio file path
+    const getAudioPath = useCallback((infinitive: string, pronoun: string): string => {
+        return `/audio/${infinitive}_${pronoun}.mp3`;
+    }, []);
+
+    // Preload all conjugations for a verb
+    const preloadVerb = useCallback((infinitive: string) => {
+        // Preload all 6 conjugations in the background
+        PRONOUNS.forEach(pronoun => {
+            const key = `${infinitive}_${pronoun}`;
+
+            // Skip if already preloaded
+            if (preloadCacheRef.current.has(key)) return;
+
+            const audio = new Audio();
+            const path = getAudioPath(infinitive, pronoun);
+
+            // Preload the audio
+            audio.preload = 'auto';
+            audio.src = path;
+
+            // Store in cache
+            preloadCacheRef.current.set(key, audio);
+
+            // Clean up old cache entries (keep last 3 verbs = 18 files)
+            if (preloadCacheRef.current.size > 18) {
+                const firstKey = preloadCacheRef.current.keys().next().value;
+                if (firstKey) {
+                    const oldAudio = preloadCacheRef.current.get(firstKey);
+                    if (oldAudio) {
+                        oldAudio.pause();
+                        oldAudio.src = '';
+                    }
+                    preloadCacheRef.current.delete(firstKey);
+                }
+            }
         });
-    }, []);
+    }, [getAudioPath]);
 
-    // Set voice function
-    const setVoice = useCallback((voiceId: string) => {
-        setCurrentVoice(voiceId);
-        localStorage.setItem('verbski-elevenlabs-voice', voiceId);
-    }, []);
-
-    // Play audio using Speech Synthesis
-    const playSpeechSynthesis = useCallback((text: string) => {
-        if (!isSpeechAvailable) return false;
-        
-        try {
-            window.speechSynthesis.cancel();
-            
-            const newUtterance = new SpeechSynthesisUtterance(text);
-
-            newUtterance.lang = 'ru-RU';
-            newUtterance.rate = 0.5; // Slow rate for Russian
-            newUtterance.pitch = 1;
-            newUtterance.volume = 1;
-
-            // Event handlers
-            newUtterance.onstart = () => {
-                console.log('Speech synthesis started:', text);
-                setIsPlaying(true);
-            };
-
-            newUtterance.onend = () => {
-                console.log('Speech synthesis ended:', text);
-                setIsPlaying(false);
-            };
-
-            newUtterance.onerror = (event) => {
-                console.error('Speech synthesis error:', event);
-                setIsPlaying(false);
-            };
-
-            window.speechSynthesis.speak(newUtterance);
-            return true;
-        } catch (error) {
-            console.error('Error playing speech synthesis:', error);
-            return false;
-        }
-    }, [isSpeechAvailable]);
-
-    // Play audio using ElevenLabs
-    const playElevenLabsAudio = useCallback(async (text: string): Promise<boolean> => {
-        try {
-            // Generate a cache key from the text and voice
-            const cacheKey = `${text}_${currentVoice}`;
-            
-            // Check if we have this audio cached
-            let audioBuffer: ArrayBuffer;
-            
-            if (audioCache.has(cacheKey)) {
-                console.log('Using cached audio for:', text);
-                audioBuffer = audioCache.get(cacheKey)!;
-            } else {
-                console.log('Fetching audio from ElevenLabs for:', text);
-                // Fetch from ElevenLabs
-                audioBuffer = await elevenLabsClient.textToSpeech(text, currentVoice);
-                
-                // Cache the result
-                audioCache.set(cacheKey, audioBuffer);
-            }
-            
-            // Create a new audio element or reuse the existing one
-            let audio = audioElement;
-            if (!audio) {
-                audio = new Audio();
-                setAudioElement(audio);
-            } else {
-                // Stop any currently playing audio
-                audio.pause();
-                audio.currentTime = 0;
-            }
-            
-            // Convert the array buffer to a Blob
-            const blob = new Blob([audioBuffer], { type: 'audio/mpeg' });
-            const url = URL.createObjectURL(blob);
-            
-            // Set up event handlers
-            audio.onplaying = () => {
-                console.log('ElevenLabs audio started playing:', text);
-                setIsPlaying(true);
-            };
-            
-            audio.onended = () => {
-                console.log('ElevenLabs audio ended:', text);
-                setIsPlaying(false);
-                URL.revokeObjectURL(url); // Clean up the blob URL
-            };
-            
-            audio.onerror = (event) => {
-                console.error('ElevenLabs audio error:', event);
-                setIsPlaying(false);
-                URL.revokeObjectURL(url); // Clean up the blob URL
-            };
-            
-            // Set the source and play
-            audio.src = url;
-            await audio.play();
-            
-            return true;
-        } catch (error) {
-            console.error('Error playing ElevenLabs audio:', error);
-            setIsPlaying(false);
-            return false;
-        }
-    }, [audioElement, currentVoice, audioCache]);
     // Stop audio function
     const stopAudio = useCallback(() => {
-        if (isSpeechAvailable) {
-            window.speechSynthesis.cancel();
+        if (audioElementRef.current) {
+            audioElementRef.current.pause();
+            audioElementRef.current.currentTime = 0;
         }
-        
-        if (audioElement) {
-            audioElement.pause();
-            audioElement.currentTime = 0;
-        }
-        
         setIsPlaying(false);
-    }, [isSpeechAvailable, audioElement]);
+    }, []);
+
     // Main play audio function
-    const playAudio = useCallback(async (text: string): Promise<void> => {
+    const playAudio = useCallback(async (infinitive: string, pronoun: string): Promise<void> => {
         if (isMuted) {
             console.log('Audio is muted, not playing');
             return;
         }
 
+        if (!audioElementRef.current) {
+            console.error('Audio element not initialized');
+            return;
+        }
+
         // Stop any currently playing audio
         stopAudio();
-        
-        // Try ElevenLabs first if enabled
-        if (isElevenLabsEnabled) {
-            const success = await playElevenLabsAudio(text);
-            if (success) return;
-            
-            // If ElevenLabs failed, fall back to speech synthesis
-            console.warn('ElevenLabs playback failed, falling back to speech synthesis');
+
+        const key = `${infinitive}_${pronoun}`;
+        const audioPath = getAudioPath(infinitive, pronoun);
+
+        try {
+            // Check if audio is preloaded
+            const preloadedAudio = preloadCacheRef.current.get(key);
+
+            if (preloadedAudio) {
+                // Use preloaded audio
+                console.log('Using preloaded audio for:', audioPath);
+
+                // Set up event handlers
+                preloadedAudio.onplaying = () => {
+                    console.log('Audio started playing:', audioPath);
+                    setIsPlaying(true);
+                };
+
+                preloadedAudio.onended = () => {
+                    console.log('Audio ended:', audioPath);
+                    setIsPlaying(false);
+                };
+
+                preloadedAudio.onerror = (event) => {
+                    console.error('Audio error:', event);
+                    setIsPlaying(false);
+                };
+
+                // Reset and play
+                preloadedAudio.currentTime = 0;
+                await preloadedAudio.play();
+            } else {
+                // Load and play directly
+                console.log('Loading audio:', audioPath);
+
+                const audio = audioElementRef.current;
+
+                // Set up event handlers
+                audio.onplaying = () => {
+                    console.log('Audio started playing:', audioPath);
+                    setIsPlaying(true);
+                };
+
+                audio.onended = () => {
+                    console.log('Audio ended:', audioPath);
+                    setIsPlaying(false);
+                };
+
+                audio.onerror = (event) => {
+                    console.error('Audio error for', audioPath, ':', event);
+                    setIsPlaying(false);
+                };
+
+                // Set the source and play
+                audio.src = audioPath;
+                await audio.play();
+            }
+        } catch (error) {
+            console.error('Error playing audio:', error);
+            setIsPlaying(false);
         }
-        
-        // Use speech synthesis as fallback
-        playSpeechSynthesis(text);
-    }, [isMuted, isElevenLabsEnabled, playElevenLabsAudio, playSpeechSynthesis, stopAudio]);
-
-
+    }, [isMuted, stopAudio, getAudioPath]);
 
     const value = {
         isMuted,
         isPlaying,
-        isElevenLabsEnabled,
-        currentVoice,
-        availableVoices,
         toggleMute,
         playAudio,
         stopAudio,
-        toggleElevenLabs,
-        setCurrentVoice: setVoice
+        preloadVerb
     };
 
     return (

@@ -6,33 +6,44 @@ import { Volume2, VolumeX } from 'lucide-react';
 interface VerbDisplayProps {
   currentVerb: Verb | null;
   currentConjugation: string;
+  correctPronoun: string;
   feedback: string;
 }
 
-export const VerbDisplay: React.FC<VerbDisplayProps> = ({ 
-  currentVerb, 
-  currentConjugation, 
+export const VerbDisplay: React.FC<VerbDisplayProps> = ({
+  currentVerb,
+  currentConjugation,
+  correctPronoun,
   feedback
 }) => {
-  const { 
-    isMuted, 
-    isPlaying, 
-    toggleMute, 
-    playAudio, 
+  const {
+    isMuted,
+    isPlaying,
+    toggleMute,
+    playAudio,
+    preloadVerb
   } = useAudio();
   
   const conjugationRef = useRef<HTMLSpanElement>(null);
   const [fontSize, setFontSize] = useState<number>(2.5); // Default size in rem
   
+  // Preload audio for current verb when it changes
   useEffect(() => {
-    if (currentConjugation && !isMuted) {
+    if (currentVerb?.infinitive) {
+      preloadVerb(currentVerb.infinitive);
+    }
+  }, [currentVerb?.infinitive, preloadVerb]);
+
+  // Play audio when conjugation changes
+  useEffect(() => {
+    if (currentVerb && correctPronoun && !isMuted) {
       const timerId = setTimeout(() => {
-        playAudio(currentConjugation);
+        playAudio(currentVerb.infinitive, correctPronoun);
       }, 300);
-      
+
       return () => clearTimeout(timerId);
     }
-  }, [currentConjugation, isMuted, playAudio]);
+  }, [currentVerb, correctPronoun, isMuted, playAudio]);
   
   // Logic mainly for mobile
   useEffect(() => {
@@ -64,11 +75,11 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
     <div className="verb-display">
       <div className="verb-infinitive">{currentVerb?.infinitive} ({currentVerb?.english})</div>
       <div className="verb-conjugation">
-        <span 
+        <span
           ref={conjugationRef}
           className="conjugation-text"
-          onClick={() => !isMuted && playAudio(currentConjugation)}
-          style={{ 
+          onClick={() => currentVerb && !isMuted && playAudio(currentVerb.infinitive, correctPronoun)}
+          style={{
             cursor: isMuted ? 'default' : 'pointer',
             fontSize: `${fontSize}rem`
           }}
