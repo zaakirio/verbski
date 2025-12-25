@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { ConjugationModal } from './ConjugationModal';
-import { AboutModal } from './AboutModal';
+import { ConjugationModal, AboutModal } from './Modals';
 import { useTutorial } from '../contexts/TutorialContext';
 
 export const Header: React.FC = () => {

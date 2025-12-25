@@ -1,25 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-
-type RequiredAction = 'click-audio' | 'click-pronoun' | 'acknowledge';
-type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
-
-export interface TutorialStep {
-    id: string;
-    targetSelector: string;
-    title: string;
-    description: string;
-    position: TooltipPosition;
-    requiredAction: RequiredAction;
-}
-
-interface TutorialContextType {
-    isActive: boolean;
-    currentStepIndex: number;
-    currentStep: TutorialStep | null;
-    startTutorial: () => void;
-    skipTutorial: () => void;
-    completeStep: () => void;
-}
+import { TutorialStep, TutorialContextType } from '../types';
 
 const TUTORIAL_STEPS: TutorialStep[] = [
     {

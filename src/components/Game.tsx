@@ -1,24 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../styles/styles.css';
+import '../styles/index.css';
 import verbsData from '../assets/verbs.json';
 import { useGameLogic } from '../hooks/useGameLogic';
 import { useKeyboardNavigation } from '../hooks/useKeyboardNav';
 import { useAudio } from '../contexts/AudioContext';
 import { useSettings } from '../contexts/SettingsContext';
-import { HistorySection } from './HistorySection';
 import { PronounOptions } from './PronounOptions';
 import { VerbDisplay } from './VerbDisplay';
-import { GameModal } from './GameModal';
+import { GameModal, SettingsModal } from './Modals';
 import { LivesDisplay } from './LivesDisplay';
 import { ProgressBar } from './ProgressBar';
-import { ConfettiCanvas, ConfettiCanvasRef } from './ConfettiCanvas';
-import { NoiseOverlay } from './NoiseOverlay';
-import { CustomCursor } from './CustomCursor';
-import { FloatingLetters } from './FloatingLetters';
+import { ConfettiCanvas, NoiseOverlay, CustomCursor, FloatingLetters, SettingsButton } from './UI';
+import { ConfettiCanvasRef } from '../types';
 import { Header } from './Header';
 import { HeroSection } from './LandingPage';
-import { SettingsButton } from './SettingsButton';
-import { SettingsModal } from './SettingsModal';
 import { Verb } from '../types';
 import { Star } from 'lucide-react';
 
@@ -30,24 +25,6 @@ const RussianVerbGame: React.FC = () => {
   const { playSoundEffect } = useAudio();
   const { dailyGoal: settingsDailyGoal } = useSettings();
 
-  const isMobileDevice = () => {
-    return window.innerWidth <= 768;
-  };
-
-  const [isMobile, setIsMobile] = useState<boolean>(isMobileDevice());
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(isMobileDevice());
-    };
-
-    window.addEventListener('resize', checkMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
-
   useEffect(() => {
     setVerbs(verbsData.verbs);
   }, []);
@@ -57,7 +34,6 @@ const RussianVerbGame: React.FC = () => {
     currentConjugation,
     correctPronoun,
     score,
-    history,
     gameStarted,
     correctButton,
     wrongButton,
@@ -177,21 +153,6 @@ const RussianVerbGame: React.FC = () => {
 
       {/* Settings Modal */}
       <SettingsModal />
-
-      {/* Desktop History Sidebar - Hidden for landing page layout */}
-      {!isMobile && gameStarted && (
-        <div style={{
-          position: 'fixed',
-          right: '24px',
-          top: '120px',
-          width: '280px',
-          maxHeight: 'calc(100vh - 160px)',
-          zIndex: 50,
-          display: 'none',
-        }}>
-          <HistorySection history={history} />
-        </div>
-      )}
     </div>
   );
 };

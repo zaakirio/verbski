@@ -1,10 +1,5 @@
 import React from 'react';
-
-interface GameModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children: React.ReactNode;
-}
+import { GameModalProps } from '../../types';
 
 export const GameModal: React.FC<GameModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;

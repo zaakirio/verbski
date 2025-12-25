@@ -1,10 +1,6 @@
 import React from 'react';
 import { Heart } from 'lucide-react';
-
-interface AboutModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { AboutModalProps } from '../../types';
 
 export const AboutModal: React.FC<AboutModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;

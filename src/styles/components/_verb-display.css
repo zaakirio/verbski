@@ -1,0 +1,75 @@
+/* --- VERB DISPLAY --- */
+.verb-display {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.verb-meaning {
+    font-size: 1rem;
+    color: var(--color-accent);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.verb-infinitive {
+    font-family: var(--font-russian);
+    font-size: 2.5rem;
+    color: var(--color-text-main);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.verb-conjugation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.conjugation-text {
+    font-family: var(--font-russian);
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    font-weight: bold;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    padding: 5px;
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.conjugation-text:hover {
+    text-decoration: underline;
+}
+
+.conjugation-text.highlight {
+    color: var(--color-success);
+    text-shadow: 0 0 8px rgba(88, 129, 87, 0.3);
+}
+
+.audio-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.audio-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--color-text-main);
+}

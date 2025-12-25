@@ -1,8 +1,8 @@
-import React from 'react';
+import { memo } from 'react';
 import { Settings } from 'lucide-react';
-import { useSettings } from '../contexts/SettingsContext';
+import { useSettings } from '../../contexts/SettingsContext';
 
-export const SettingsButton: React.FC = () => {
+export const SettingsButton = memo(() => {
     const { openSettings } = useSettings();
 
     return (
@@ -15,4 +15,4 @@ export const SettingsButton: React.FC = () => {
             <Settings size={18} />
         </button>
     );
-};
+});

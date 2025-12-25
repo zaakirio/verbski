@@ -1,14 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Verb, HistoryItem } from '../types';
+import { Verb, HistoryItem, DailyProgress } from '../types';
 
 const MAX_LIVES = 3;
 const DEFAULT_DAILY_GOAL = 5;
 const STORAGE_KEY = 'verbski-daily-progress';
-
-interface DailyProgress {
-  date: string;
-  correct: number;
-}
 
 const getTodayDateString = (): string => {
   return new Date().toISOString().split('T')[0];

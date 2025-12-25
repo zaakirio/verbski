@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { Flame, Download } from 'lucide-react';
-import { DownloadModal } from '../DownloadModal';
-
-interface HeroSectionProps {
-  children: React.ReactNode;
-}
+import { DownloadModal } from '../Modals';
+import { HeroSectionProps } from '../../types';
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ children }) => {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);

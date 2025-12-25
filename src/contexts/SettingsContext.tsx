@@ -1,12 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-
-interface SettingsContextType {
-    dailyGoal: number;
-    setDailyGoal: (goal: number) => void;
-    isSettingsOpen: boolean;
-    openSettings: () => void;
-    closeSettings: () => void;
-}
+import { SettingsContextType } from '../types';
 
 const STORAGE_KEY = 'verbski-daily-goal';
 const DEFAULT_DAILY_GOAL = 5;

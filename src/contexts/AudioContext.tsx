@@ -1,16 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode, useRef } from 'react';
-
-type SoundEffectType = 'hover' | 'correct' | 'wrong';
-
-interface AudioContextType {
-    isMuted: boolean;
-    isPlaying: boolean;
-    toggleMute: () => void;
-    playAudio: (infinitive: string, pronoun: string) => Promise<void>;
-    stopAudio: () => void;
-    preloadVerb: (infinitive: string) => void;
-    playSoundEffect: (type: SoundEffectType) => void;
-}
+import { SoundEffectType, AudioContextType } from '../types';
 
 export const AudioContext = createContext<AudioContextType>({
     isMuted: false,
@@ -161,16 +150,13 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     // Main play audio function (uses ref for muted state to keep callback stable)
     const playAudio = useCallback(async (infinitive: string, pronoun: string): Promise<void> => {
         const key = `${infinitive}_${pronoun}`;
-        console.log(`[Audio] playAudio called: ${key}, isMuted: ${isMutedRef.current}, isPlaying: ${isPlayingRef.current}`);
 
         if (isMutedRef.current) {
-            console.log('[Audio] BLOCKED - muted');
             return;
         }
 
         // Prevent overlapping play calls
         if (isPlayingRef.current) {
-            console.log('[Audio] BLOCKED - already playing');
             return;
         }
 
@@ -180,10 +166,8 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             // Check if audio is preloaded
             const preloadedAudio = preloadCacheRef.current.get(key);
             const audioToPlay = preloadedAudio || audioElementRef.current;
-            console.log(`[Audio] Using ${preloadedAudio ? 'PRELOADED' : 'MAIN'} element`);
 
             if (!audioToPlay) {
-                console.error('[Audio] Audio element not initialized');
                 return;
             }
 
@@ -208,28 +192,22 @@ export const AudioProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
             // Set up fresh event handlers
             audioToPlay.onplaying = () => {
-                console.log('[Audio] EVENT: onplaying');
                 isPlayingRef.current = true;
                 setIsPlaying(true);
             };
 
             audioToPlay.onended = () => {
-                console.log('[Audio] EVENT: onended');
                 isPlayingRef.current = false;
                 setIsPlaying(false);
             };
 
             audioToPlay.onerror = () => {
-                console.log('[Audio] EVENT: onerror');
                 isPlayingRef.current = false;
                 setIsPlaying(false);
             };
 
-            console.log('[Audio] Calling play()...');
             await audioToPlay.play();
-            console.log('[Audio] play() resolved');
-        } catch (error) {
-            console.error('[Audio] Error:', error);
+        } catch {
             isPlayingRef.current = false;
             setIsPlaying(false);
         }

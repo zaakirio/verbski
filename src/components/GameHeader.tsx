@@ -1,11 +1,11 @@
-import React from 'react';
+import { memo } from 'react';
 
-export const GameHeader: React.FC = () => {
+export const GameHeader = memo(() => {
   return (
     <header className="game-header">
-      <h1>Verbski 📖</h1>
+      <h1>Verbski</h1>
       <p>A russian verb conjugation game</p>
     </header>
   );
-};
+});
 

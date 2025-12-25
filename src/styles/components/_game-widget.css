@@ -1,0 +1,68 @@
+/* --- GAME WIDGET --- */
+.game-showcase {
+    position: relative;
+    perspective: 1000px;
+}
+
+.game-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.4s, box-shadow 0.4s;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-card:hover {
+    transform: translateY(-5px) rotateX(2deg);
+    box-shadow: var(--shadow-hover);
+}
+
+@media (max-width: 768px) {
+    .game-card {
+        padding: 24px;
+    }
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px dashed #F0F0F0;
+}
+
+.lives-container {
+    display: flex;
+    gap: 4px;
+    color: var(--color-error);
+}
+
+.lives-container svg {
+    width: 20px;
+    height: 20px;
+}
+
+.lives-container .heart-active {
+    opacity: 1;
+}
+
+.lives-container .heart-inactive {
+    opacity: 0.3;
+}
+
+.live-score {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.live-score svg {
+    color: var(--color-accent);
+}

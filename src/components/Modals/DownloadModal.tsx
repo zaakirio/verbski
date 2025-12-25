@@ -1,13 +1,8 @@
 import React from 'react';
 import { Download, FileJson, FileText } from 'lucide-react';
-import verbsData from '../assets/verbs.json';
-import { pronounDisplay } from '../utils/constants';
-import { Verb } from '../types';
-
-interface DownloadModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import verbsData from '../../assets/verbs.json';
+import { pronounDisplay } from '../../utils/constants';
+import { Verb, DownloadModalProps } from '../../types';
 
 export const DownloadModal: React.FC<DownloadModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;

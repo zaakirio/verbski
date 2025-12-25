@@ -2,7 +2,7 @@ import { AudioProvider } from './contexts/AudioContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { TutorialProvider } from './contexts/TutorialContext';
 import Game from './components/Game';
-import { TutorialOverlay } from './components/TutorialOverlay';
+import { TutorialOverlay } from './components/Tutorial';
 
 function App() {
   return (

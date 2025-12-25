@@ -1,7 +1,7 @@
-import React from 'react';
+import { memo } from 'react';
 import { Zap } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+export const Footer = memo(() => {
   return (
     <footer>
       <div className="container">
@@ -17,4 +17,4 @@ export const Footer: React.FC = () => {
       </div>
     </footer>
   );
-};
+});

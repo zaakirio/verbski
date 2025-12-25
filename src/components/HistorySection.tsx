@@ -1,12 +1,8 @@
-import React from 'react';
-import { HistoryItem } from '../types';
+import { memo } from 'react';
+import { HistorySectionProps } from '../types';
 import { pronounDisplay, CORRECT_EMOJI, INCORRECT_EMOJI } from '../utils/constants';
 
-interface HistorySectionProps {
-  history: HistoryItem[];
-}
-
-export const HistorySection: React.FC<HistorySectionProps> = ({ history }) => {
+export const HistorySection = memo<HistorySectionProps>(({ history }) => {
   return (
     <div className="history-section">
       <h3>Verb History</h3>
@@ -39,4 +35,4 @@ export const HistorySection: React.FC<HistorySectionProps> = ({ history }) => {
       </div>
     </div>
   );
-};
+});

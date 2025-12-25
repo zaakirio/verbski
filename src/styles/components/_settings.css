@@ -1,0 +1,122 @@
+/* --- SETTINGS --- */
+.settings-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    padding: 8px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.settings-button:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--color-primary);
+}
+
+.settings-button svg {
+    transition: transform 0.3s ease;
+}
+
+.settings-button:hover svg {
+    transform: rotate(45deg);
+}
+
+.settings-modal {
+    max-width: 400px;
+}
+
+.settings-section {
+    margin-bottom: 1.5rem;
+}
+
+.settings-label {
+    display: block;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-text-main);
+    margin-bottom: 0.5rem;
+}
+
+.settings-description {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.goal-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.goal-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: var(--color-bg);
+    border-radius: 4px;
+    outline: none;
+}
+
+.goal-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: none;
+}
+
+.goal-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.goal-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+    border: none;
+}
+
+.goal-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+}
+
+.goal-value {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    min-width: 2.5rem;
+    text-align: center;
+}
+
+.settings-save-button {
+    width: 100%;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: var(--font-heading);
+}
+
+.settings-save-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(58, 90, 64, 0.4);
+}
