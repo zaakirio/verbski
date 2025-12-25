@@ -1,20 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Verb } from '../types';
 import { useAudio } from '../contexts/AudioContext';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, MessageCircle } from 'lucide-react';
 
 interface VerbDisplayProps {
   currentVerb: Verb | null;
   currentConjugation: string;
   correctPronoun: string;
-  feedback: string;
+  showFeedbackOverlay?: boolean;
 }
 
 export const VerbDisplay: React.FC<VerbDisplayProps> = ({
   currentVerb,
   currentConjugation,
   correctPronoun,
-  feedback
+  showFeedbackOverlay = false
 }) => {
   const {
     isMuted,
@@ -23,10 +23,11 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
     playAudio,
     preloadVerb
   } = useAudio();
-  
+
   const conjugationRef = useRef<HTMLSpanElement>(null);
-  const [fontSize, setFontSize] = useState<number>(2.5); // Default size in rem
-  
+  const [fontSize, setFontSize] = useState<number>(2.5);
+  const lastPlayedRef = useRef<string>('');
+
   // Preload audio for current verb when it changes
   useEffect(() => {
     if (currentVerb?.infinitive) {
@@ -34,69 +35,95 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
     }
   }, [currentVerb?.infinitive, preloadVerb]);
 
-  // Play audio when conjugation changes
+  // Play audio when a NEW verb is loaded (not during feedback overlay)
   useEffect(() => {
-    if (currentVerb && correctPronoun && !isMuted) {
-      const timerId = setTimeout(() => {
-        playAudio(currentVerb.infinitive, correctPronoun);
-      }, 300);
+    if (!currentVerb || !correctPronoun || isMuted || showFeedbackOverlay) return;
 
-      return () => clearTimeout(timerId);
+    const audioKey = `${currentVerb.infinitive}_${correctPronoun}`;
+
+    // Only play if this is a new verb/pronoun combination
+    if (lastPlayedRef.current === audioKey) return;
+
+    const timerId = setTimeout(() => {
+      lastPlayedRef.current = audioKey;
+      playAudio(currentVerb.infinitive, correctPronoun);
+    }, 300);
+
+    return () => clearTimeout(timerId);
+  }, [currentVerb?.infinitive, correctPronoun, isMuted, showFeedbackOverlay, playAudio]);
+
+  // Reset lastPlayedRef when feedback overlay closes (new verb coming)
+  useEffect(() => {
+    if (!showFeedbackOverlay) {
+      // Reset after a short delay to allow new verb to trigger audio
+      const timer = setTimeout(() => {
+        lastPlayedRef.current = '';
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [currentVerb, correctPronoun, isMuted, playAudio]);
-  
-  // Logic mainly for mobile
+  }, [showFeedbackOverlay]);
+
+  // Dynamic font sizing for mobile
   useEffect(() => {
     if (!conjugationRef.current) return;
-    
+
     conjugationRef.current.style.fontSize = '2.5rem';
-    
+
     const containerWidth = conjugationRef.current.parentElement?.clientWidth || 0;
     if (containerWidth === 0) return;
-    
+
     const textWidth = conjugationRef.current.scrollWidth;
     const textLength = currentConjugation.length;
-    
-    // If text is wider than container, adjust font size
+
     if (textWidth > containerWidth * 0.8) {
-      // Calculate an appropriate font size
-      // Short words (< 10 chars) shouldn't go below 1.5rem
-      // Longer words can go down to 1.2rem
       const minSize = textLength < 10 ? 1.5 : 1.2;
       const calculatedSize = Math.max(minSize, 2.5 * (containerWidth * 0.8) / textWidth);
       setFontSize(calculatedSize);
     } else {
-      // Reset to default size if not too wide
       setFontSize(textLength > 12 ? 2 : 2.5);
     }
   }, [currentConjugation]);
 
+  const handleManualPlay = () => {
+    if (currentVerb && !isMuted) {
+      playAudio(currentVerb.infinitive, correctPronoun);
+    }
+  };
+
   return (
     <div className="verb-display">
-      <div className="verb-infinitive">{currentVerb?.infinitive} ({currentVerb?.english})</div>
+      {/* English meaning with icon */}
+      <div className="verb-meaning">
+        <MessageCircle size={16} />
+        <span>{currentVerb?.english || 'loading...'}</span>
+      </div>
+
+      {/* Russian infinitive */}
+      <div className="verb-infinitive">
+        {currentVerb?.infinitive?.toUpperCase() || 'LOADING...'}
+      </div>
+
+      {/* Conjugation with audio button */}
       <div className="verb-conjugation">
         <span
           ref={conjugationRef}
           className="conjugation-text"
-          onClick={() => currentVerb && !isMuted && playAudio(currentVerb.infinitive, correctPronoun)}
+          onClick={handleManualPlay}
           style={{
             cursor: isMuted ? 'default' : 'pointer',
             fontSize: `${fontSize}rem`
           }}
           title={isMuted ? "Audio is muted" : "Click to hear pronunciation"}
         >
-          {currentConjugation}
+          {currentConjugation || '...'}
         </span>
-          <button 
-            className={`audio-button ${isPlaying ? 'playing' : ''}`}
-            onClick={toggleMute}
-            aria-label={isMuted ? "Enable audio" : "Disable audio"}
-          >
-            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-          </button>
-      </div>
-      <div className="feedback">
-        {feedback && <div className={`animate-fadeIn ${feedback.includes('✅') ? 'feedback-correct' : ''}`}>{feedback}</div>}
+        <button
+          className={`audio-button ${isPlaying ? 'playing' : ''}`}
+          onClick={toggleMute}
+          aria-label={isMuted ? "Enable audio" : "Disable audio"}
+        >
+          {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
       </div>
     </div>
   );
