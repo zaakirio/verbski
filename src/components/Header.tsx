@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { ConjugationModal } from './ConjugationModal';
-import { AboutModal } from './AboutModal';
+import { ConjugationModal, AboutModal } from './Modals';
 import { useTutorial } from '../contexts/TutorialContext';
 
 export const Header: React.FC = () => {
@@ -32,17 +31,19 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="main-header">
+      <header className="main-header" role="banner">
         <div className="container">
-          <nav>
-            <a href="#" className="logo hover-target">
+          <nav aria-label="Main navigation">
+            <a href="#" className="logo hover-target" aria-label="Verbski - Home">
               Verbski
             </a>
-            <div className="nav-links">
+            <div className="nav-links" role="menubar">
               <a
                 href="#conjugation"
                 className="hover-target"
                 onClick={handleConjugationClick}
+                role="menuitem"
+                aria-label="Learn about Russian verb conjugation"
               >
                 Conjugation
               </a>
@@ -50,6 +51,8 @@ export const Header: React.FC = () => {
                 href="#about"
                 className="hover-target"
                 onClick={handleAboutClick}
+                role="menuitem"
+                aria-label="About Verbski"
               >
                 About
               </a>
@@ -58,6 +61,7 @@ export const Header: React.FC = () => {
               href="#game"
               className="btn btn-primary hover-target"
               onClick={handleStartPlaying}
+              aria-label="Start playing the Russian verb conjugation game"
             >
               Start Playing
             </a>

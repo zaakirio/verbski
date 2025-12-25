@@ -1,12 +1,8 @@
-import React from 'react';
+import { memo } from 'react';
 import { Heart } from 'lucide-react';
+import { LivesDisplayProps } from '../types';
 
-interface LivesDisplayProps {
-  lives: number;
-  maxLives?: number;
-}
-
-export const LivesDisplay: React.FC<LivesDisplayProps> = ({ lives, maxLives = 3 }) => {
+export const LivesDisplay = memo<LivesDisplayProps>(({ lives, maxLives = 3 }) => {
   return (
     <div className="lives-container">
       {Array.from({ length: maxLives }, (_, i) => (
@@ -14,11 +10,9 @@ export const LivesDisplay: React.FC<LivesDisplayProps> = ({ lives, maxLives = 3 
           key={i}
           size={20}
           fill={i < lives ? 'currentColor' : 'none'}
-          style={{
-            opacity: i < lives ? 1 : 0.3,
-          }}
+          className={i < lives ? 'heart-active' : 'heart-inactive'}
         />
       ))}
     </div>
   );
-};
+});

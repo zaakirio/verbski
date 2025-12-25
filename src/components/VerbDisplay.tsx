@@ -1,20 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Verb } from '../types';
+import { VerbDisplayProps } from '../types';
 import { useAudio } from '../contexts/AudioContext';
 import { useTutorial } from '../contexts/TutorialContext';
 import { Volume2, VolumeX, MessageCircle } from 'lucide-react';
-
-interface FeedbackInfo {
-  text: string;
-  isCorrect: boolean;
-}
-
-interface VerbDisplayProps {
-  currentVerb: Verb | null;
-  currentConjugation: string;
-  correctPronoun: string;
-  feedback?: FeedbackInfo | null;
-}
 
 export const VerbDisplay: React.FC<VerbDisplayProps> = ({
   currentVerb,
@@ -40,17 +28,6 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
     playAudioRef.current = playAudio;
   }, [playAudio]);
 
-  // Track mount/unmount
-  useEffect(() => {
-    console.log('[VerbDisplay] *** COMPONENT MOUNTED ***');
-    return () => console.log('[VerbDisplay] *** COMPONENT UNMOUNTED ***');
-  }, []);
-
-  // Track render count
-  const renderCountRef = useRef(0);
-  renderCountRef.current++;
-  console.log('[VerbDisplay] Render #', renderCountRef.current);
-
   // Preload audio for current verb when it changes
   useEffect(() => {
     if (currentVerb?.infinitive) {
@@ -58,37 +35,18 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
     }
   }, [currentVerb?.infinitive, preloadVerb]);
 
-  // Track previous deps to see what's changing
-  const prevDepsRef = useRef({ infinitive: '', pronoun: '', muted: false });
-
   // Play audio when verb/pronoun changes
   // Using playAudioRef to prevent effect re-runs from playAudio reference changes
   useEffect(() => {
-    const prev = prevDepsRef.current;
-    const curr = { infinitive: currentVerb?.infinitive || '', pronoun: correctPronoun, muted: isMuted };
-
-    console.log('[VerbDisplay] Audio effect running. Deps changed?',
-      'infinitive:', prev.infinitive !== curr.infinitive ? `"${prev.infinitive}" -> "${curr.infinitive}"` : 'NO',
-      'pronoun:', prev.pronoun !== curr.pronoun ? `"${prev.pronoun}" -> "${curr.pronoun}"` : 'NO',
-      'muted:', prev.muted !== curr.muted ? `${prev.muted} -> ${curr.muted}` : 'NO'
-    );
-
-    prevDepsRef.current = curr;
-
     if (currentVerb?.infinitive && correctPronoun && !isMuted) {
-      console.log('[VerbDisplay] Setting 300ms timeout to play audio');
       const infinitive = currentVerb.infinitive;
       const timerId = setTimeout(() => {
-        console.log('[VerbDisplay] Timeout fired - calling playAudio');
         playAudioRef.current(infinitive, correctPronoun);
       }, 300);
 
       return () => {
-        console.log('[VerbDisplay] Cleanup - clearing timeout');
         clearTimeout(timerId);
       };
-    } else {
-      console.log('[VerbDisplay] Skipped - conditions not met');
     }
   }, [currentVerb?.infinitive, correctPronoun, isMuted]);
 
@@ -114,9 +72,7 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
   }, [currentConjugation]);
 
   const handleManualPlay = () => {
-    console.log('[VerbDisplay] Manual click - currentVerb:', currentVerb?.infinitive, 'isMuted:', isMuted);
     if (currentVerb && !isMuted) {
-      console.log('[VerbDisplay] Calling playAudio from manual click');
       playAudio(currentVerb.infinitive, correctPronoun);
     }
 

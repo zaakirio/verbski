@@ -1,22 +1,8 @@
 import { useRef, useEffect, useCallback, useImperativeHandle, forwardRef } from 'react';
-
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  color: string;
-  size: number;
-  gravity: number;
-  drag: number;
-}
+import { Particle, ConfettiCanvasRef } from '../../types';
 
 const COLORS = ['#3A5A40', '#A3B18A', '#D4A373', '#E9C46A'];
 const PARTICLE_COUNT = 60;
-
-export interface ConfettiCanvasRef {
-  fire: () => void;
-}
 
 export const ConfettiCanvas = forwardRef<ConfettiCanvasRef, object>((_, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

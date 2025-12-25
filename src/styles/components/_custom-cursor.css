@@ -1,0 +1,45 @@
+/* --- CUSTOM CURSOR --- */
+.cursor-dot,
+.cursor-circle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transition: transform 0.1s ease, background-color 0.2s;
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--color-primary);
+}
+
+.cursor-circle {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-primary);
+    transition: width 0.3s, height 0.3s, background-color 0.3s;
+}
+
+body.cursor-hovering .cursor-circle {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(58, 90, 64, 0.1);
+    border-color: transparent;
+}
+
+/* Hide custom cursor on touch devices and restore default cursor */
+@media (hover: none) and (pointer: coarse) {
+    *,
+    *::before,
+    *::after {
+        cursor: auto;
+    }
+    .cursor-dot,
+    .cursor-circle {
+        display: none;
+    }
+}

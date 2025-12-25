@@ -1,18 +1,15 @@
-import React from 'react';
+import { memo, useMemo } from 'react';
+import { ProgressBarProps } from '../types';
 
-interface ProgressBarProps {
-  current: number;
-  goal?: number;
-  label?: string;
-}
-
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export const ProgressBar = memo<ProgressBarProps>(({
   current,
   goal = 5,
   label = 'Daily Goal'
 }) => {
   const percentage = Math.min((current / goal) * 100, 100);
   const displayCurrent = Math.min(current, goal);
+
+  const fillStyle = useMemo(() => ({ width: `${percentage}%` }), [percentage]);
 
   return (
     <div className="progress-container">
@@ -23,9 +20,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       <div className="progress-track">
         <div
           className="progress-fill"
-          style={{ width: `${percentage}%` }}
+          style={fillStyle}
         />
       </div>
     </div>
   );
-};
+});

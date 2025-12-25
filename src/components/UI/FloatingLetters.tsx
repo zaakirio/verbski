@@ -1,16 +1,8 @@
 import React, { useMemo } from 'react';
+import { Floater } from '../../types';
 
 const CYRILLIC_CHARS = ['Б', 'Г', 'Д', 'Ж', 'З', 'Й', 'Л', 'П', 'Ф', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'];
 const FLOATER_COUNT = 15;
-
-interface Floater {
-  id: number;
-  char: string;
-  left: string;
-  fontSize: string;
-  animationDuration: string;
-  animationDelay: string;
-}
 
 export const FloatingLetters: React.FC = () => {
   const floaters = useMemo<Floater[]>(() => {

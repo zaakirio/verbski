@@ -1,0 +1,129 @@
+/* --- HISTORY SECTION (SIDEBAR) --- */
+.history-section {
+    background-color: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.history-section h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 1rem;
+    font-family: var(--font-heading);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.history-list {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex-grow: 1;
+    padding-right: 0.5rem;
+}
+
+.history-item {
+    background-color: var(--color-bg);
+    padding: 0.75rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.1s;
+}
+
+.history-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.history-item.correct {
+    border-left: 4px solid var(--color-success);
+}
+
+.history-item.incorrect {
+    border-left: 4px solid var(--color-error);
+}
+
+.history-top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.history-emoji {
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.history-verb {
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.history-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-conjugation {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--color-primary);
+    font-family: var(--font-russian);
+}
+
+.history-answer {
+    display: flex;
+    align-items: center;
+}
+
+.history-arrow {
+    margin: 0 0.25rem;
+    color: var(--color-text-muted);
+}
+
+.history-pronoun {
+    background-color: rgba(58, 90, 64, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    color: var(--color-primary);
+    font-family: var(--font-russian);
+}
+
+.history-correct-answer {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: rgba(58, 90, 64, 0.1);
+    border-radius: 10px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: rgba(58, 90, 64, 0.3);
+    border-radius: 10px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(58, 90, 64, 0.5);
+}

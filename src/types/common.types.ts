@@ -18,3 +18,8 @@ export interface HistoryItem {
   isCorrect: boolean;
   correctPronoun: string;
 }
+
+export interface DailyProgress {
+  date: string;
+  correct: number;
+}

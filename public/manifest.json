@@ -1,0 +1,41 @@
+{
+  "name": "Verbski - Russian Verb Conjugation Game",
+  "short_name": "Verbski",
+  "description": "Master Russian verb conjugation through gamified learning. Practice 600+ verbs with instant feedback. Open source, free, and fun.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["education", "games", "language"],
+  "icons": [
+    {
+      "src": "/verbski.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Verbski Russian Verb Conjugation Game"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Start Practice",
+      "short_name": "Play",
+      "description": "Start practicing Russian verb conjugation",
+      "url": "/#game",
+      "icons": [{ "src": "/verbski.svg", "sizes": "any" }]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Settings } from 'lucide-react';
-import { useSettings } from '../contexts/SettingsContext';
+import { useSettings } from '../../contexts/SettingsContext';
 
 export const SettingsModal: React.FC = () => {
     const { isSettingsOpen, closeSettings, dailyGoal, setDailyGoal } = useSettings();

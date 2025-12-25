@@ -1,0 +1,90 @@
+/* --- PUZZLE AREA --- */
+.puzzle-area {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.instruction {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-bottom: 16px;
+}
+
+.instruction .target-subject {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* --- PRONOUN OPTIONS --- */
+.pronoun-options,
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (min-width: 640px) {
+    .pronoun-options,
+    .options-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.pronoun-button,
+.option-btn {
+    background: var(--color-bg);
+    border: 2px solid transparent;
+    padding: 20px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-family: var(--font-russian);
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pronoun-button:hover,
+.option-btn:hover {
+    border-color: var(--color-primary-light);
+    background: #fff;
+    transform: translateY(-2px);
+}
+
+.pronoun-button.correct,
+.option-btn.correct {
+    background-color: var(--color-success);
+    color: white;
+    border-color: var(--color-success);
+    animation: pulse 0.4s ease-out;
+    pointer-events: none;
+}
+
+.pronoun-button.wrong,
+.option-btn.wrong {
+    background-color: var(--color-error);
+    color: white;
+    border-color: var(--color-error);
+    animation: shake 0.4s ease-in-out;
+    pointer-events: none;
+}
+
+.pronoun-button.disabled,
+.option-btn.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}

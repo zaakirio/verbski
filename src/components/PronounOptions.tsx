@@ -1,16 +1,10 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { pronounDisplay } from '../utils/constants';
 import { useAudio } from '../contexts/AudioContext';
 import { useTutorial } from '../contexts/TutorialContext';
+import { PronounOptionsProps } from '../types';
 
-interface PronounOptionsProps {
-  checkAnswer: (pronoun: string) => void;
-  correctButton: string | null;
-  wrongButton?: string | null;
-  isAcceptingInput?: boolean;
-}
-
-export const PronounOptions: React.FC<PronounOptionsProps> = ({
+export const PronounOptions = memo<PronounOptionsProps>(({
   checkAnswer,
   correctButton,
   wrongButton = null,
@@ -19,20 +13,23 @@ export const PronounOptions: React.FC<PronounOptionsProps> = ({
   const { playSoundEffect } = useAudio();
   const { currentStep, completeStep } = useTutorial();
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = useCallback(() => {
     if (isAcceptingInput) {
       playSoundEffect('hover');
     }
-  };
+  }, [isAcceptingInput, playSoundEffect]);
 
-  const handleClick = (key: string) => {
+  const handleButtonClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    const key = e.currentTarget.dataset.pronoun;
+    if (!key) return;
+
     checkAnswer(key);
 
     // Complete tutorial step if waiting for pronoun click
     if (currentStep?.requiredAction === 'click-pronoun') {
       completeStep();
     }
-  };
+  }, [checkAnswer, currentStep, completeStep]);
 
   return (
     <div className="pronoun-options">
@@ -49,8 +46,9 @@ export const PronounOptions: React.FC<PronounOptionsProps> = ({
         return (
           <button
             key={key}
+            data-pronoun={key}
             className={className}
-            onClick={() => handleClick(key)}
+            onClick={handleButtonClick}
             onMouseEnter={handleMouseEnter}
             disabled={!isAcceptingInput}
           >
@@ -60,4 +58,4 @@ export const PronounOptions: React.FC<PronounOptionsProps> = ({
       })}
     </div>
   );
-};
+});

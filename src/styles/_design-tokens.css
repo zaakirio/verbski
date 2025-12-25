@@ -1,0 +1,26 @@
+/* --- FONTS --- */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap');
+
+/* --- DESIGN TOKENS --- */
+:root {
+    --color-bg: #FDFBF7;
+    --color-text-main: #2D3436;
+    --color-text-muted: #636E72;
+
+    --color-primary: #3A5A40;
+    --color-primary-light: #A3B18A;
+    --color-accent: #D4A373;
+    --color-accent-bright: #E9C46A;
+    --color-success: #588157;
+    --color-error: #BC4749;
+
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-russian: 'Merriweather', serif;
+
+    --container-width: 1200px;
+    --shadow-card: 0 10px 30px rgba(58, 90, 64, 0.08);
+    --shadow-hover: 0 20px 40px rgba(58, 90, 64, 0.15);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+}

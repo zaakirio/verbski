@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useTutorial, TUTORIAL_STEPS } from '../contexts/TutorialContext';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useTutorial, TUTORIAL_STEPS } from '../../contexts/TutorialContext';
+import { debounce } from '../../utils/debounce';
 
 interface Position {
     top: number;
@@ -71,26 +72,32 @@ export const TutorialOverlay: React.FC = () => {
         targetEl.classList.add('tutorial-spotlight-target');
     }, [currentStep]);
 
+    // Debounced version for resize/scroll events
+    const debouncedUpdatePositions = useMemo(
+        () => debounce(updatePositions, 100),
+        [updatePositions]
+    );
+
     useEffect(() => {
         if (!isActive || !currentStep) return;
 
         // Initial position update
         updatePositions();
 
-        // Update on resize/scroll
-        window.addEventListener('resize', updatePositions);
-        window.addEventListener('scroll', updatePositions);
+        // Update on resize/scroll (debounced)
+        window.addEventListener('resize', debouncedUpdatePositions);
+        window.addEventListener('scroll', debouncedUpdatePositions);
 
         return () => {
-            window.removeEventListener('resize', updatePositions);
-            window.removeEventListener('scroll', updatePositions);
+            window.removeEventListener('resize', debouncedUpdatePositions);
+            window.removeEventListener('scroll', debouncedUpdatePositions);
 
             // Remove spotlight class from all elements
             document.querySelectorAll('.tutorial-spotlight-target').forEach(el => {
                 el.classList.remove('tutorial-spotlight-target');
             });
         };
-    }, [isActive, currentStep, updatePositions]);
+    }, [isActive, currentStep, updatePositions, debouncedUpdatePositions]);
 
     if (!isActive || !currentStep || !targetPosition) return null;
 

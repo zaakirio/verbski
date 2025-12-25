@@ -1,10 +1,6 @@
 import React from 'react';
 import { BookOpen } from 'lucide-react';
-
-interface ConjugationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { ConjugationModalProps } from '../../types';
 
 export const ConjugationModal: React.FC<ConjugationModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;

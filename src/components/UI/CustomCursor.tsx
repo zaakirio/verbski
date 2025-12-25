@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import { debounce } from '../../utils/debounce';
 
 export const CustomCursor: React.FC = () => {
   const dotRef = useRef<HTMLDivElement>(null);
@@ -46,9 +47,9 @@ export const CustomCursor: React.FC = () => {
     };
   }, [handleMouseMove, handleMouseEnter, handleMouseLeave]);
 
-  // Re-attach listeners when DOM changes
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
+  // Debounced function to re-attach listeners
+  const reattachListeners = useMemo(
+    () => debounce(() => {
       const interactiveElements = document.querySelectorAll('a, button, .hover-target, input, select, textarea');
       interactiveElements.forEach(el => {
         el.removeEventListener('mouseenter', handleMouseEnter);
@@ -56,12 +57,18 @@ export const CustomCursor: React.FC = () => {
         el.addEventListener('mouseenter', handleMouseEnter);
         el.addEventListener('mouseleave', handleMouseLeave);
       });
-    });
+    }, 200),
+    [handleMouseEnter, handleMouseLeave]
+  );
+
+  // Re-attach listeners when DOM changes (debounced)
+  useEffect(() => {
+    const observer = new MutationObserver(reattachListeners);
 
     observer.observe(document.body, { childList: true, subtree: true });
 
     return () => observer.disconnect();
-  }, [handleMouseEnter, handleMouseLeave]);
+  }, [reattachListeners]);
 
   return (
     <>
