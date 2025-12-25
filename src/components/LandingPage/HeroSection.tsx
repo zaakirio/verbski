@@ -8,24 +8,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ children }) => {
 
   return (
     <>
-      <section id="conjugation" className="hero">
+      <section id="conjugation" className="hero" aria-labelledby="hero-heading">
         <div className="container hero-grid">
           <div className="hero-content">
-            <div className="stats-row">
-              <div className="stat-item hover-target">
-                <Flame size={16} />
+            <div className="stats-row" role="list" aria-label="App statistics">
+              <div className="stat-item hover-target" role="listitem">
+                <Flame size={16} aria-hidden="true" />
                 <span>500+ Most Common Verbs</span>
               </div>
               <button
                 className="stat-item hover-target stat-button"
                 onClick={() => setIsDownloadModalOpen(true)}
+                aria-label="Download verb list"
               >
-                <Download size={16} />
+                <Download size={16} aria-hidden="true" />
                 <span>Download</span>
               </button>
             </div>
 
-            <h1>
+            <h1 id="hero-heading">
               Master Russian verbs <br />
               <span>without the headache.</span>
             </h1>
@@ -37,7 +38,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ children }) => {
             </p>
           </div>
 
-          <div className="game-showcase">
+          <div className="game-showcase" role="main" aria-label="Russian verb conjugation game">
             {children}
           </div>
         </div>
