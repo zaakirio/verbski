@@ -3,6 +3,8 @@ import '../styles/styles.css';
 import verbsData from '../assets/verbs.json';
 import { useGameLogic } from '../hooks/useGameLogic';
 import { useKeyboardNavigation } from '../hooks/useKeyboardNav';
+import { useAudio } from '../contexts/AudioContext';
+import { useSettings } from '../contexts/SettingsContext';
 import { HistorySection } from './HistorySection';
 import { PronounOptions } from './PronounOptions';
 import { VerbDisplay } from './VerbDisplay';
@@ -14,7 +16,9 @@ import { NoiseOverlay } from './NoiseOverlay';
 import { CustomCursor } from './CustomCursor';
 import { FloatingLetters } from './FloatingLetters';
 import { Header } from './Header';
-import { HeroSection, AboutSection, ContributeSection, Footer } from './LandingPage';
+import { HeroSection } from './LandingPage';
+import { SettingsButton } from './SettingsButton';
+import { SettingsModal } from './SettingsModal';
 import { Verb } from '../types';
 import { Star } from 'lucide-react';
 
@@ -23,6 +27,8 @@ const RussianVerbGame: React.FC = () => {
   const [showGameOver, setShowGameOver] = useState(false);
   const confettiRef = useRef<ConfettiCanvasRef>(null);
   const prevScoreRef = useRef<number>(0);
+  const { playSoundEffect } = useAudio();
+  const { dailyGoal: settingsDailyGoal } = useSettings();
 
   const isMobileDevice = () => {
     return window.innerWidth <= 768;
@@ -56,89 +62,61 @@ const RussianVerbGame: React.FC = () => {
     correctButton,
     wrongButton,
     isAcceptingInput,
-    showFeedbackOverlay,
-    lastAnswerCorrect,
-    nextVerb,
     checkAnswer,
     lives,
     dailyProgress,
     dailyGoal,
     maxLives,
     resetGame,
-  } = useGameLogic(verbs);
+  } = useGameLogic(verbs, settingsDailyGoal);
 
   useKeyboardNavigation(gameStarted, checkAnswer, isAcceptingInput);
 
-  // Fire confetti on correct answer
+  // Fire confetti and play sound on correct answer
   useEffect(() => {
-    if (score > prevScoreRef.current && confettiRef.current) {
-      confettiRef.current.fire();
+    if (score > prevScoreRef.current) {
+      if (confettiRef.current) {
+        confettiRef.current.fire();
+      }
+      playSoundEffect('correct');
     }
     prevScoreRef.current = score;
-  }, [score]);
+  }, [score, playSoundEffect]);
+
+  // Play wrong sound when wrong button is shown
+  useEffect(() => {
+    if (wrongButton) {
+      playSoundEffect('wrong');
+    }
+  }, [wrongButton, playSoundEffect]);
 
   // Show game over modal when lives reach 0
   useEffect(() => {
-    if (gameStarted && lives === 0 && showFeedbackOverlay) {
-      setShowGameOver(true);
+    if (gameStarted && lives === 0) {
+      // Delay to let the wrong answer animation show
+      setTimeout(() => {
+        setShowGameOver(true);
+      }, 1500);
     }
-  }, [lives, gameStarted, showFeedbackOverlay]);
+  }, [lives, gameStarted]);
 
   const handlePlayAgain = () => {
     setShowGameOver(false);
     resetGame();
   };
 
-  const handleNextVerb = () => {
-    nextVerb();
+  // Determine feedback text based on last answer
+  const getFeedbackText = () => {
+    if (correctButton && !wrongButton) {
+      return { text: 'Correct! +50', isCorrect: true };
+    }
+    if (wrongButton) {
+      return { text: 'Oops! Try again', isCorrect: false };
+    }
+    return null;
   };
 
-  // Game Card Component with Feedback Overlay
-  const GameCard = () => (
-    <div className="game-card">
-      <ConfettiCanvas ref={confettiRef} />
-
-      {/* Feedback Overlay */}
-      <div className={`feedback-overlay ${showFeedbackOverlay && !showGameOver ? 'active' : ''}`}>
-        <div className="feedback-text">
-          {lastAnswerCorrect ? 'Correct!' : 'Oops!'}
-        </div>
-        <div style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-          {lastAnswerCorrect ? '+50 Points' : 'Try the next one'}
-        </div>
-        <button className="btn btn-primary" onClick={handleNextVerb}>
-          Next Verb
-        </button>
-      </div>
-
-      <div className="game-header">
-        <LivesDisplay lives={lives} maxLives={maxLives} />
-        <div className="live-score">
-          <Star size={16} fill="currentColor" />
-          <span>{score}</span>
-        </div>
-      </div>
-
-      <VerbDisplay
-        currentVerb={currentVerb}
-        currentConjugation={currentConjugation}
-        correctPronoun={correctPronoun}
-        showFeedbackOverlay={showFeedbackOverlay}
-      />
-
-      <PronounOptions
-        checkAnswer={checkAnswer}
-        correctButton={correctButton}
-        wrongButton={wrongButton}
-        isAcceptingInput={isAcceptingInput}
-      />
-
-      <ProgressBar
-        current={dailyProgress}
-        goal={dailyGoal}
-      />
-    </div>
-  );
+  const feedback = getFeedbackText();
 
   return (
     <div className="russian-game-container">
@@ -150,14 +128,40 @@ const RussianVerbGame: React.FC = () => {
 
       <main>
         <HeroSection>
-          <GameCard />
+          {/* Game Card - inlined to prevent unmount/remount on re-renders */}
+          <div id="game" className="game-card">
+            <ConfettiCanvas ref={confettiRef} />
+
+            <div className="game-header">
+              <LivesDisplay lives={lives} maxLives={maxLives} />
+              <SettingsButton />
+              <div className="live-score">
+                <Star size={16} fill="currentColor" />
+                <span>{score}</span>
+              </div>
+            </div>
+
+            <VerbDisplay
+              currentVerb={currentVerb}
+              currentConjugation={currentConjugation}
+              correctPronoun={correctPronoun}
+              feedback={feedback}
+            />
+
+            <PronounOptions
+              checkAnswer={checkAnswer}
+              correctButton={correctButton}
+              wrongButton={wrongButton}
+              isAcceptingInput={isAcceptingInput}
+            />
+
+            <ProgressBar
+              current={dailyProgress}
+              goal={dailyGoal}
+            />
+          </div>
         </HeroSection>
-
-        <AboutSection />
-        <ContributeSection />
       </main>
-
-      <Footer />
 
       {/* Game Over Modal */}
       <GameModal isOpen={showGameOver} onClose={handlePlayAgain}>
@@ -170,6 +174,9 @@ const RussianVerbGame: React.FC = () => {
           Play Again
         </button>
       </GameModal>
+
+      {/* Settings Modal */}
+      <SettingsModal />
 
       {/* Desktop History Sidebar - Hidden for landing page layout */}
       {!isMobile && gameStarted && (

@@ -1,20 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Verb } from '../types';
 import { useAudio } from '../contexts/AudioContext';
+import { useTutorial } from '../contexts/TutorialContext';
 import { Volume2, VolumeX, MessageCircle } from 'lucide-react';
+
+interface FeedbackInfo {
+  text: string;
+  isCorrect: boolean;
+}
 
 interface VerbDisplayProps {
   currentVerb: Verb | null;
   currentConjugation: string;
   correctPronoun: string;
-  showFeedbackOverlay?: boolean;
+  feedback?: FeedbackInfo | null;
 }
 
 export const VerbDisplay: React.FC<VerbDisplayProps> = ({
   currentVerb,
   currentConjugation,
   correctPronoun,
-  showFeedbackOverlay = false
+  feedback
 }) => {
   const {
     isMuted,
@@ -23,10 +29,27 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
     playAudio,
     preloadVerb
   } = useAudio();
+  const { currentStep, completeStep } = useTutorial();
 
   const conjugationRef = useRef<HTMLSpanElement>(null);
   const [fontSize, setFontSize] = useState<number>(2.5);
-  const lastPlayedRef = useRef<string>('');
+
+  // Store playAudio in a ref to avoid it triggering effect re-runs
+  const playAudioRef = useRef(playAudio);
+  useEffect(() => {
+    playAudioRef.current = playAudio;
+  }, [playAudio]);
+
+  // Track mount/unmount
+  useEffect(() => {
+    console.log('[VerbDisplay] *** COMPONENT MOUNTED ***');
+    return () => console.log('[VerbDisplay] *** COMPONENT UNMOUNTED ***');
+  }, []);
+
+  // Track render count
+  const renderCountRef = useRef(0);
+  renderCountRef.current++;
+  console.log('[VerbDisplay] Render #', renderCountRef.current);
 
   // Preload audio for current verb when it changes
   useEffect(() => {
@@ -35,33 +58,39 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
     }
   }, [currentVerb?.infinitive, preloadVerb]);
 
-  // Play audio when a NEW verb is loaded (not during feedback overlay)
+  // Track previous deps to see what's changing
+  const prevDepsRef = useRef({ infinitive: '', pronoun: '', muted: false });
+
+  // Play audio when verb/pronoun changes
+  // Using playAudioRef to prevent effect re-runs from playAudio reference changes
   useEffect(() => {
-    if (!currentVerb || !correctPronoun || isMuted || showFeedbackOverlay) return;
+    const prev = prevDepsRef.current;
+    const curr = { infinitive: currentVerb?.infinitive || '', pronoun: correctPronoun, muted: isMuted };
 
-    const audioKey = `${currentVerb.infinitive}_${correctPronoun}`;
+    console.log('[VerbDisplay] Audio effect running. Deps changed?',
+      'infinitive:', prev.infinitive !== curr.infinitive ? `"${prev.infinitive}" -> "${curr.infinitive}"` : 'NO',
+      'pronoun:', prev.pronoun !== curr.pronoun ? `"${prev.pronoun}" -> "${curr.pronoun}"` : 'NO',
+      'muted:', prev.muted !== curr.muted ? `${prev.muted} -> ${curr.muted}` : 'NO'
+    );
 
-    // Only play if this is a new verb/pronoun combination
-    if (lastPlayedRef.current === audioKey) return;
+    prevDepsRef.current = curr;
 
-    const timerId = setTimeout(() => {
-      lastPlayedRef.current = audioKey;
-      playAudio(currentVerb.infinitive, correctPronoun);
-    }, 300);
+    if (currentVerb?.infinitive && correctPronoun && !isMuted) {
+      console.log('[VerbDisplay] Setting 300ms timeout to play audio');
+      const infinitive = currentVerb.infinitive;
+      const timerId = setTimeout(() => {
+        console.log('[VerbDisplay] Timeout fired - calling playAudio');
+        playAudioRef.current(infinitive, correctPronoun);
+      }, 300);
 
-    return () => clearTimeout(timerId);
-  }, [currentVerb?.infinitive, correctPronoun, isMuted, showFeedbackOverlay, playAudio]);
-
-  // Reset lastPlayedRef when feedback overlay closes (new verb coming)
-  useEffect(() => {
-    if (!showFeedbackOverlay) {
-      // Reset after a short delay to allow new verb to trigger audio
-      const timer = setTimeout(() => {
-        lastPlayedRef.current = '';
-      }, 100);
-      return () => clearTimeout(timer);
+      return () => {
+        console.log('[VerbDisplay] Cleanup - clearing timeout');
+        clearTimeout(timerId);
+      };
+    } else {
+      console.log('[VerbDisplay] Skipped - conditions not met');
     }
-  }, [showFeedbackOverlay]);
+  }, [currentVerb?.infinitive, correctPronoun, isMuted]);
 
   // Dynamic font sizing for mobile
   useEffect(() => {
@@ -85,8 +114,15 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
   }, [currentConjugation]);
 
   const handleManualPlay = () => {
+    console.log('[VerbDisplay] Manual click - currentVerb:', currentVerb?.infinitive, 'isMuted:', isMuted);
     if (currentVerb && !isMuted) {
+      console.log('[VerbDisplay] Calling playAudio from manual click');
       playAudio(currentVerb.infinitive, correctPronoun);
+    }
+
+    // Complete tutorial step if waiting for audio click
+    if (currentStep?.requiredAction === 'click-audio') {
+      completeStep();
     }
   };
 
@@ -107,7 +143,7 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
       <div className="verb-conjugation">
         <span
           ref={conjugationRef}
-          className="conjugation-text"
+          className={`conjugation-text ${feedback?.isCorrect ? 'highlight' : ''}`}
           onClick={handleManualPlay}
           style={{
             cursor: isMuted ? 'default' : 'pointer',
@@ -124,6 +160,15 @@ export const VerbDisplay: React.FC<VerbDisplayProps> = ({
         >
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </button>
+      </div>
+
+      {/* Feedback message */}
+      <div className="feedback">
+        {feedback && (
+          <div className={`animate-fadeIn ${feedback.isCorrect ? 'feedback-correct' : 'feedback-wrong'}`}>
+            {feedback.text}
+          </div>
+        )}
       </div>
     </div>
   );

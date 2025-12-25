@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Verb, HistoryItem } from '../types';
 
-const DAILY_GOAL = 5;
 const MAX_LIVES = 3;
+const DEFAULT_DAILY_GOAL = 5;
 const STORAGE_KEY = 'verbski-daily-progress';
 
 interface DailyProgress {
@@ -41,7 +41,7 @@ const saveDailyProgress = (correct: number): void => {
   }
 };
 
-export const useGameLogic = (verbs: Verb[]) => {
+export const useGameLogic = (verbs: Verb[], dailyGoal: number = DEFAULT_DAILY_GOAL) => {
   const [currentVerb, setCurrentVerb] = useState<Verb | null>(null);
   const [currentConjugation, setCurrentConjugation] = useState<string>("");
   const [correctPronoun, setCorrectPronoun] = useState<string>("");
@@ -53,7 +53,6 @@ export const useGameLogic = (verbs: Verb[]) => {
   const [correctButton, setCorrectButton] = useState<string | null>(null);
   const [wrongButton, setWrongButton] = useState<string | null>(null);
   const [isAcceptingInput, setIsAcceptingInput] = useState<boolean>(true);
-  const [showFeedbackOverlay, setShowFeedbackOverlay] = useState<boolean>(false);
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState<boolean>(false);
 
   // New state for lives and daily progress
@@ -76,7 +75,6 @@ export const useGameLogic = (verbs: Verb[]) => {
     setCorrectButton(null);
     setWrongButton(null);
     setIsAcceptingInput(true);
-    setShowFeedbackOverlay(false);
   }, [verbs]);
 
   const resetGame = useCallback(() => {
@@ -85,7 +83,8 @@ export const useGameLogic = (verbs: Verb[]) => {
     setTotalAttempts(0);
     setHistory([]);
     setStreak(0);
-    setShowFeedbackOverlay(false);
+    setCorrectButton(null);
+    setWrongButton(null);
     getRandomVerbAndConjugation();
   }, [getRandomVerbAndConjugation]);
 
@@ -96,10 +95,6 @@ export const useGameLogic = (verbs: Verb[]) => {
       getRandomVerbAndConjugation();
     }
   }, [verbs.length, gameStarted, getRandomVerbAndConjugation]);
-
-  const nextVerb = useCallback(() => {
-    getRandomVerbAndConjugation();
-  }, [getRandomVerbAndConjugation]);
 
   const checkAnswer = useCallback((selectedPronoun: string) => {
     if (!isAcceptingInput) return;
@@ -139,11 +134,11 @@ export const useGameLogic = (verbs: Verb[]) => {
 
     setHistory(prev => [newHistoryItem, ...prev]);
 
-    // Show feedback overlay after a short delay
+    // Auto-advance to next verb after showing feedback
     setTimeout(() => {
-      setShowFeedbackOverlay(true);
-    }, 400);
-  }, [currentVerb, currentConjugation, correctPronoun, isAcceptingInput]);
+      getRandomVerbAndConjugation();
+    }, isCorrect ? 1200 : 1500);
+  }, [currentVerb, currentConjugation, correctPronoun, isAcceptingInput, getRandomVerbAndConjugation]);
 
   return {
     currentVerb,
@@ -158,13 +153,11 @@ export const useGameLogic = (verbs: Verb[]) => {
     wrongButton,
     checkAnswer,
     isAcceptingInput,
-    showFeedbackOverlay,
     lastAnswerCorrect,
-    nextVerb,
     // Lives and daily progress
     lives,
     dailyProgress,
-    dailyGoal: DAILY_GOAL,
+    dailyGoal,
     maxLives: MAX_LIVES,
     resetGame,
   };

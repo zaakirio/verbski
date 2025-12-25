@@ -1,5 +1,7 @@
 import React from 'react';
 import { pronounDisplay } from '../utils/constants';
+import { useAudio } from '../contexts/AudioContext';
+import { useTutorial } from '../contexts/TutorialContext';
 
 interface PronounOptionsProps {
   checkAnswer: (pronoun: string) => void;
@@ -14,6 +16,24 @@ export const PronounOptions: React.FC<PronounOptionsProps> = ({
   wrongButton = null,
   isAcceptingInput = true
 }) => {
+  const { playSoundEffect } = useAudio();
+  const { currentStep, completeStep } = useTutorial();
+
+  const handleMouseEnter = () => {
+    if (isAcceptingInput) {
+      playSoundEffect('hover');
+    }
+  };
+
+  const handleClick = (key: string) => {
+    checkAnswer(key);
+
+    // Complete tutorial step if waiting for pronoun click
+    if (currentStep?.requiredAction === 'click-pronoun') {
+      completeStep();
+    }
+  };
+
   return (
     <div className="pronoun-options">
       {Object.entries(pronounDisplay).map(([key, display]) => {
@@ -30,7 +50,8 @@ export const PronounOptions: React.FC<PronounOptionsProps> = ({
           <button
             key={key}
             className={className}
-            onClick={() => checkAnswer(key)}
+            onClick={() => handleClick(key)}
+            onMouseEnter={handleMouseEnter}
             disabled={!isAcceptingInput}
           >
             {display}

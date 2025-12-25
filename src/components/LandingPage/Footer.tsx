@@ -9,9 +9,8 @@ export const Footer: React.FC = () => {
           <Zap fill="currentColor" size={24} />
           Verbski
         </div>
-        <p>Open source language learning.</p>
+        <p>Master Russian verb conjugation.</p>
         <div className="footer-links">
-          <a href="#" className="hover-target">License</a>
           <a href="#" className="hover-target">Privacy</a>
           <a href="#" className="hover-target">Contact</a>
         </div>

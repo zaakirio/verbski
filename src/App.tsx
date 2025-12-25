@@ -1,13 +1,21 @@
 import { AudioProvider } from './contexts/AudioContext';
+import { SettingsProvider } from './contexts/SettingsContext';
+import { TutorialProvider } from './contexts/TutorialContext';
 import Game from './components/Game';
+import { TutorialOverlay } from './components/TutorialOverlay';
 
 function App() {
   return (
-    <AudioProvider>
-      <div className="App">
-        <Game />
-      </div>
-    </AudioProvider>
+    <SettingsProvider>
+      <TutorialProvider>
+        <AudioProvider>
+          <div className="App">
+            <Game />
+            <TutorialOverlay />
+          </div>
+        </AudioProvider>
+      </TutorialProvider>
+    </SettingsProvider>
   );
 }
 
