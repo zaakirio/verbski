@@ -1168,8 +1168,9 @@ footer .footer-links a:hover {
 .info-modal {
     max-width: 36rem;
     text-align: left;
-    max-height: 90vh;
+    max-height: calc(100vh - 48px);
     overflow-y: auto;
+    margin: 24px;
 }
 
 .info-modal .modal-icon {
