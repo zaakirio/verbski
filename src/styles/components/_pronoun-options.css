@@ -44,6 +44,8 @@
     color: var(--color-primary);
     cursor: pointer;
     transition: all 0.2s;
+    min-height: 48px; /* Apple HIG minimum touch target */
+    -webkit-tap-highlight-color: transparent;
 }
 
 .pronoun-button:hover,
@@ -51,6 +53,21 @@
     border-color: var(--color-primary-light);
     background: #fff;
     transform: translateY(-2px);
+}
+
+/* Touch device active state - press feedback */
+@media (hover: none) and (pointer: coarse) {
+    .pronoun-button:active,
+    .option-btn:active {
+        transform: scale(0.97);
+        background: #fff;
+        border-color: var(--color-primary-light);
+    }
+
+    .pronoun-button:hover,
+    .option-btn:hover {
+        transform: none;
+    }
 }
 
 .pronoun-button.correct,
@@ -87,4 +104,28 @@
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
+}
+
+/* Mobile-specific sizing */
+@media (max-width: 480px) {
+    .pronoun-options,
+    .options-grid {
+        gap: 8px;
+    }
+
+    .pronoun-button,
+    .option-btn {
+        padding: 14px 10px;
+        font-size: 1.25rem;
+        min-height: 52px;
+        border-radius: 12px;
+    }
+}
+
+@media (max-width: 360px) {
+    .pronoun-button,
+    .option-btn {
+        padding: 12px 8px;
+        font-size: 1.1rem;
+    }
 }

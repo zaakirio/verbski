@@ -1,0 +1,85 @@
+/* --- MOBILE BOTTOM NAVIGATION --- */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(253, 251, 247, 0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 8px 16px;
+    padding-bottom: calc(8px + var(--safe-area-bottom));
+    z-index: 90;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: all 0.2s ease;
+    border-radius: 12px;
+    min-width: 64px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-nav-item svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+}
+
+.mobile-nav-item span {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.mobile-nav-item.active {
+    color: var(--color-primary);
+}
+
+.mobile-nav-item.active svg {
+    transform: scale(1.1);
+}
+
+.mobile-nav-item:active {
+    transform: scale(0.95);
+    background: rgba(58, 90, 64, 0.1);
+}
+
+/* Active indicator dot */
+.mobile-nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    width: 4px;
+    height: 4px;
+    background: var(--color-accent);
+    border-radius: 50%;
+}
+
+/* Show only on mobile */
+@media (max-width: 768px) {
+    .mobile-nav {
+        display: flex;
+    }
+
+    /* Add padding to main content to account for bottom nav */
+    .game-content {
+        padding-bottom: calc(80px + var(--safe-area-bottom));
+    }
+
+    .main-game-area {
+        min-height: calc(100vh - 180px - 80px - var(--safe-area-bottom));
+    }
+}

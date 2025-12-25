@@ -7,7 +7,7 @@ import { useAudio } from '../contexts/AudioContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { PronounOptions } from './PronounOptions';
 import { VerbDisplay } from './VerbDisplay';
-import { GameModal, SettingsModal } from './Modals';
+import { GameModal, SettingsModal, AboutModal } from './Modals';
 import { LivesDisplay } from './LivesDisplay';
 import { ProgressBar } from './ProgressBar';
 import { ConfettiCanvas, NoiseOverlay, CustomCursor, FloatingLetters, SettingsButton } from './UI';
@@ -16,14 +16,19 @@ import { Header } from './Header';
 import { HeroSection } from './LandingPage';
 import { Verb } from '../types';
 import { Star } from 'lucide-react';
+import { MobileNav } from './MobileNav';
+import { MobileHistoryDrawer } from './MobileHistoryDrawer';
 
 const RussianVerbGame: React.FC = () => {
   const [verbs, setVerbs] = useState<Verb[]>([]);
   const [showGameOver, setShowGameOver] = useState(false);
+  const [mobileActiveTab, setMobileActiveTab] = useState<'game' | 'history' | 'settings' | 'info'>('game');
+  const [showHistoryDrawer, setShowHistoryDrawer] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
   const confettiRef = useRef<ConfettiCanvasRef>(null);
   const prevScoreRef = useRef<number>(0);
   const { playSoundEffect } = useAudio();
-  const { dailyGoal: settingsDailyGoal } = useSettings();
+  const { dailyGoal: settingsDailyGoal, openSettings } = useSettings();
 
   useEffect(() => {
     setVerbs(verbsData.verbs);
@@ -44,7 +49,26 @@ const RussianVerbGame: React.FC = () => {
     dailyGoal,
     maxLives,
     resetGame,
+    history,
   } = useGameLogic(verbs, settingsDailyGoal);
+
+  // Handle mobile navigation tab changes
+  const handleMobileTabChange = (tab: 'game' | 'history' | 'settings' | 'info') => {
+    setMobileActiveTab(tab);
+    if (tab === 'history') {
+      setShowHistoryDrawer(true);
+    } else if (tab === 'settings') {
+      openSettings();
+    } else if (tab === 'info') {
+      setShowAboutModal(true);
+    }
+  };
+
+  // Reset active tab when drawers/modals close
+  const handleHistoryClose = () => {
+    setShowHistoryDrawer(false);
+    setMobileActiveTab('game');
+  };
 
   useKeyboardNavigation(gameStarted, checkAnswer, isAcceptingInput);
 
@@ -153,6 +177,28 @@ const RussianVerbGame: React.FC = () => {
 
       {/* Settings Modal */}
       <SettingsModal />
+
+      {/* Mobile About Modal */}
+      <AboutModal
+        isOpen={showAboutModal}
+        onClose={() => {
+          setShowAboutModal(false);
+          setMobileActiveTab('game');
+        }}
+      />
+
+      {/* Mobile History Drawer */}
+      <MobileHistoryDrawer
+        isOpen={showHistoryDrawer}
+        onClose={handleHistoryClose}
+        history={history}
+      />
+
+      {/* Mobile Bottom Navigation */}
+      <MobileNav
+        activeTab={mobileActiveTab}
+        onTabChange={handleMobileTabChange}
+      />
     </div>
   );
 };

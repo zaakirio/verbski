@@ -15,6 +15,20 @@
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    min-height: 48px; /* Apple HIG minimum touch target */
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Touch device active state - press feedback */
+@media (hover: none) and (pointer: coarse) {
+    .btn:active {
+        transform: scale(0.97);
+    }
+
+    .btn-primary:hover {
+        transform: none;
+        box-shadow: 0 4px 15px rgba(58, 90, 64, 0.3);
+    }
 }
 
 .btn-primary {

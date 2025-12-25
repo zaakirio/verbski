@@ -178,3 +178,79 @@ footer .footer-links a {
 footer .footer-links a:hover {
     color: var(--color-primary);
 }
+
+/* --- MOBILE TYPOGRAPHY & SPACING --- */
+@media (max-width: 768px) {
+    .hero {
+        padding-top: calc(120px + var(--safe-area-top));
+        padding-bottom: 60px;
+        min-height: auto;
+    }
+
+    .hero-grid {
+        gap: 40px;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .hero-content h1 {
+        font-size: 2.25rem;
+        margin-bottom: 16px;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+        margin-bottom: 24px;
+        max-width: 100%;
+    }
+
+    .stats-row {
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .stat-item {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+
+    section {
+        padding: 60px 0;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+    }
+
+    .grid-3 {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .feature-card {
+        padding: 24px;
+    }
+
+    footer {
+        padding: 40px 0;
+        padding-bottom: calc(40px + var(--safe-area-bottom));
+        margin-top: 40px;
+    }
+
+    footer .footer-links {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.875rem;
+    }
+
+    .hero-content p {
+        font-size: 0.95rem;
+    }
+}
