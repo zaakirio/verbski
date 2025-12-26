@@ -73,3 +73,35 @@
     background-color: rgba(0, 0, 0, 0.1);
     color: var(--color-text-main);
 }
+
+/* Mobile verb display adjustments */
+@media (max-width: 480px) {
+    .verb-display {
+        margin-bottom: 24px;
+    }
+
+    .verb-meaning {
+        font-size: 0.9rem;
+    }
+
+    .verb-infinitive {
+        font-size: 1.75rem;
+        margin-bottom: 6px;
+    }
+
+    .conjugation-text {
+        font-size: clamp(1.25rem, 5vw, 2rem);
+    }
+
+    .audio-button {
+        padding: 8px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 360px) {
+    .verb-infinitive {
+        font-size: 1.5rem;
+    }
+}

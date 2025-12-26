@@ -21,8 +21,36 @@
 }
 
 @media (max-width: 768px) {
+    .game-showcase {
+        width: 100%;
+        max-width: 100%;
+    }
+
     .game-card {
         padding: 24px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* Disable hover transform only on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .game-card:hover {
+        transform: none;
+        box-shadow: var(--shadow-card);
+    }
+}
+
+@media (max-width: 480px) {
+    .game-card {
+        padding: 16px;
+        border-radius: var(--radius-md);
+    }
+
+    .game-header {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
     }
 }
 

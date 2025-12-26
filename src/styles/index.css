@@ -17,6 +17,8 @@
 @import './components/_header.css';
 @import './components/_game-widget.css';
 @import './components/_game-stats.css';
+@import './components/_mobile-nav.css';
+@import './components/_mobile-drawer.css';
 
 /* Game Components */
 @import './components/_verb-display.css';

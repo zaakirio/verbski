@@ -6,3 +6,9 @@
     position: relative;
     z-index: 2;
 }
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+}

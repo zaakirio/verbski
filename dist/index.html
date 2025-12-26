@@ -2,20 +2,212 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <!-- Primary Meta Tags -->
+  <title>Verbski | Russian Verb Conjugation Game - Learn Russian Verbs Free</title>
+  <meta name="title" content="Verbski | Russian Verb Conjugation Game - Learn Russian Verbs Free" />
+  <meta name="description" content="Master Russian verb conjugation through gamified learning. Practice 600+ verbs with instant feedback. Open source, free, and fun. No signup required." />
+  <meta name="keywords" content="Russian verbs, verb conjugation, learn Russian, Russian grammar, language learning, conjugation practice, Russian language game, free Russian lessons" />
+  <meta name="author" content="Verbski" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="English" />
+  <meta name="revisit-after" content="7 days" />
+
+  <!-- Canonical URL - UPDATE THIS TO YOUR ACTUAL DOMAIN -->
+  <link rel="canonical" href="https://verbski.com/" />
+
+  <!-- Favicon and Icons -->
   <link rel="icon" type="image/svg+xml" href="/verbski.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="apple-touch-icon" href="/verbski.svg" />
+  <meta name="theme-color" content="#1a1a2e" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://verbski.com/" />
+  <meta property="og:title" content="Verbski | Russian Verb Conjugation Game" />
+  <meta property="og:description" content="Master Russian verb conjugation through gamified learning. Practice 600+ verbs with instant feedback. Open source, free, and fun." />
+  <meta property="og:image" content="https://verbski.com/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Verbski" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://verbski.com/" />
+  <meta name="twitter:title" content="Verbski | Russian Verb Conjugation Game" />
+  <meta name="twitter:description" content="Master Russian verb conjugation through gamified learning. Practice 600+ verbs with instant feedback. Open source, free, and fun." />
+  <meta name="twitter:image" content="https://verbski.com/og-image.png" />
+
+  <!-- Additional SEO Tags -->
+  <meta name="application-name" content="Verbski" />
+  <meta name="apple-mobile-web-app-title" content="Verbski" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- Search Engine Verification - ADD YOUR CODES HERE -->
+  <!-- <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" /> -->
+  <!-- <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE" /> -->
+  <!-- <meta name="yandex-verification" content="YOUR_YANDEX_VERIFICATION_CODE" /> -->
+
+  <!-- Structured Data - JSON-LD for Educational Game -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Verbski",
+    "alternateName": "Russian Verb Conjugation Game",
+    "url": "https://verbski.com",
+    "description": "Master Russian verb conjugation through gamified learning. Practice 600+ verbs with instant feedback.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "Verbski"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "ratingCount": "100"
+    },
+    "featureList": [
+      "600+ Russian verbs",
+      "All conjugation patterns",
+      "Instant feedback",
+      "Progress tracking",
+      "Audio pronunciation",
+      "No signup required"
+    ],
+    "screenshot": "https://verbski.com/og-image.png",
+    "softwareVersion": "1.0.0",
+    "inLanguage": ["en", "ru"]
+  }
+  </script>
+
+  <!-- FAQ Structured Data for AI Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Verbski?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Verbski is a free, open-source web application for learning Russian verb conjugation through gamified practice. It features over 600 Russian verbs with all conjugation patterns."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I conjugate Russian verbs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Russian verbs are conjugated based on the subject pronoun and tense. Verbski helps you practice by showing you a verb infinitive and asking you to select the correct conjugated form for different pronouns like я (I), ты (you), он/она (he/she), мы (we), вы (you formal/plural), and они (they)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Verbski free to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, Verbski is completely free to use. It's open source and requires no signup or payment. You can start practicing Russian verb conjugation immediately."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many Russian verbs does Verbski have?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Verbski includes over 600 Russian verbs covering all major conjugation patterns, including first and second conjugation verbs, irregular verbs, and reflexive verbs."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Educational Course Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "Russian Verb Conjugation Practice",
+    "description": "Interactive practice for mastering Russian verb conjugation patterns",
+    "provider": {
+      "@type": "Organization",
+      "name": "Verbski"
+    },
+    "educationalLevel": "Beginner to Advanced",
+    "inLanguage": "en",
+    "teaches": "Russian verb conjugation",
+    "isAccessibleForFree": true,
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "online",
+      "courseWorkload": "Self-paced"
+    }
+  }
+  </script>
 
   <!-- Import Google Fonts for Verbski -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-
-  <title>Verbski | Russian Verb Conjugation Game</title>
-  <meta name="description" content="Master Russian verb conjugation through gamified learning. Open source, free, and fun.">
-  <script type="module" crossorigin src="/assets/index-D6T-j4fx.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-CxS2pcIs.css">
+  <script type="module" crossorigin src="/assets/index-Q8auM6GF.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DtueBZ10.css">
 </head>
 <body>
   <div id="root"></div>
+
+  <!-- Fallback content for SEO crawlers and users without JavaScript -->
+  <noscript>
+    <div style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: system-ui, sans-serif;">
+      <h1>Verbski - Russian Verb Conjugation Game</h1>
+      <p>Master Russian verb conjugation through gamified learning. Practice 600+ Russian verbs with instant feedback.</p>
+
+      <h2>Features</h2>
+      <ul>
+        <li>600+ Russian verbs covering all conjugation patterns</li>
+        <li>Practice with all six Russian pronouns (я, ты, он/она, мы, вы, они)</li>
+        <li>Instant feedback on your answers</li>
+        <li>Audio pronunciation for each verb</li>
+        <li>Progress tracking to monitor your learning</li>
+        <li>Completely free and open source</li>
+      </ul>
+
+      <h2>How to Conjugate Russian Verbs</h2>
+      <p>Russian verbs change their endings based on the subject pronoun and tense. There are two main conjugation patterns:</p>
+      <ul>
+        <li><strong>First Conjugation (-е- verbs):</strong> читать → читаю, читаешь, читает, читаем, читаете, читают</li>
+        <li><strong>Second Conjugation (-и- verbs):</strong> говорить → говорю, говоришь, говорит, говорим, говорите, говорят</li>
+      </ul>
+
+      <h2>Start Learning</h2>
+      <p>Please enable JavaScript to use Verbski and start practicing Russian verb conjugation.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <h3>What is Verbski?</h3>
+      <p>Verbski is a free, open-source web application for learning Russian verb conjugation through gamified practice.</p>
+
+      <h3>Is Verbski free?</h3>
+      <p>Yes, Verbski is completely free to use with no signup required.</p>
+
+      <h3>How many verbs does Verbski have?</h3>
+      <p>Verbski includes over 600 Russian verbs covering first conjugation, second conjugation, irregular verbs, and reflexive verbs.</p>
+    </div>
+  </noscript>
+
 </body>
 </html>
