@@ -1,17 +1,23 @@
 when:
   event: push
-  branch: [main, master]
+  branch:
+    - main
+    - master
 
 steps:
   build-and-push:
     image: gcr.io/kaniko-project/executor:latest
     commands:
+      - mkdir -p /kaniko/.docker
+      - echo "$DOCKER_CONFIG_JSON" > /kaniko/.docker/config.json
       - /kaniko/executor
         --context=.
         --destination=ghcr.io/zaakirio/verbski-web:latest
         --cache=true
         --cache-repo=ghcr.io/zaakirio/cache
         --cache-ttl=72h
+    secrets:
+      - docker_config_json
     resources:
       requests:
         memory: 256Mi
@@ -19,13 +25,3 @@ steps:
       limits:
         memory: 1Gi
         cpu: 1
-    backend_options:
-      kubernetes:
-        volumes:
-          - name: docker-config
-            mount_path: /kaniko/.docker
-            secret:
-              secret_name: ghcr-push-secret
-              items:
-                - key: .dockerconfigjson
-                  path: config.json
