@@ -6,22 +6,12 @@ when:
 
 steps:
   build-and-push:
-    image: gcr.io/kaniko-project/executor:debug
+    image: docker:28
+    environment:
+      DOCKER_CONFIG_JSON:
+        from_secret: docker_config_json
     commands:
-      - mkdir -p /kaniko/.docker
-      - echo "$DOCKER_CONFIG_JSON" > /kaniko/.docker/config.json
-      - /kaniko/executor
-        --context=.
-        --destination=ghcr.io/zaakirio/verbski-web:latest
-        --cache=true
-        --cache-repo=ghcr.io/zaakirio/cache
-        --cache-ttl=72h
-    secrets:
-      - docker_config_json
-    resources:
-      requests:
-        memory: 256Mi
-        cpu: 200m
-      limits:
-        memory: 1Gi
-        cpu: 1
+      - mkdir -p /root/.docker
+      - echo "$DOCKER_CONFIG_JSON" > /root/.docker/config.json
+      - docker build -t ghcr.io/zaakirio/verbski-web:latest .
+      - docker push ghcr.io/zaakirio/verbski-web:latest
