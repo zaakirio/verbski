@@ -6,7 +6,7 @@ when:
 
 steps:
   build-and-push:
-    image: gcr.io/kaniko-project/executor:latest
+    image: gcr.io/kaniko-project/executor:latest-debug
     commands:
       - mkdir -p /kaniko/.docker
       - echo "$DOCKER_CONFIG_JSON" > /kaniko/.docker/config.json
