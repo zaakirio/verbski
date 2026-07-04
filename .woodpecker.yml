@@ -13,5 +13,6 @@ steps:
     commands:
       - mkdir -p /root/.docker
       - echo "$DOCKER_CONFIG_JSON" > /root/.docker/config.json
-      - docker build -t ghcr.io/zaakirio/verbski-web:latest .
+      - docker build -t ghcr.io/zaakirio/verbski-web:latest -t ghcr.io/zaakirio/verbski-web:${CI_COMMIT_SHA} .
       - docker push ghcr.io/zaakirio/verbski-web:latest
+      - docker push ghcr.io/zaakirio/verbski-web:${CI_COMMIT_SHA}
