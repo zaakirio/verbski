@@ -6,5 +6,3 @@ README.md
 Dockerfile
 .dockerignore
 eslint.config.js
-tsconfig*.json
-vite.config.ts
